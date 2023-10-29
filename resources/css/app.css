@@ -1,0 +1,19 @@
+@keyframes pop {
+    50% {
+        transform: scale(1.08);
+    }
+}
+@keyframes push {
+    50% {
+        transform: scale(.95);
+    }
+}
+
+@font-face {
+    font-family: "Exo2";
+    src: url("../fonts/Exo2.ttf");
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
