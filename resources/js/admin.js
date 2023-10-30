@@ -1,5 +1,7 @@
 import {createApp} from 'vue'
 import { createRouter, createWebHashHistory } from "vue-router"
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
 import App from './components/Admin.vue'
 
 import Articles from './components/Articles.vue';
@@ -66,4 +68,5 @@ const router = createRouter({
 const app = createApp(App);
 app.config.globalProperties.titleCase = (s) => (s.toLowerCase().split(' ').map((w)=>(w.replace(w[0],w[0].toUpperCase()))).join(' '))
 app.use(router)
+app.use(CKEditor)
 app.mount("body")

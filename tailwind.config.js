@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import plugin from "tailwindcss/plugin"
 export default {
   content: [
     "./resources/**/*.blade.php",
@@ -16,6 +17,21 @@ export default {
       'sans': ['Exo2', 'sans-serif'],
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function groupPeer({ addVariant }) {
+      let pseudoVariants = [
+        "checked",
+      ].map((variant) =>
+        Array.isArray(variant) ? variant : [variant, `&:${variant}`],
+      );
+
+      for (let [variantName, state] of pseudoVariants) {
+        addVariant(`group-peer-${variantName}`, (ctx) => {
+          let result = typeof state === "function" ? state(ctx) : state;
+          return result.replace(/&(\S+)/, ":merge(.peer)$1 ~ .group &");
+        });
+      }
+    }),
+  ],
 }
 
