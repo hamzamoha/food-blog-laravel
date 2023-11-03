@@ -39,8 +39,18 @@
     <script src="/scripts/admin.js"></script>
 </head>
 
-<body>
-    
+<body class="h-screen bg-gray-200 flex flex-col w-screen overflow-hidden">
+    <div>
+        <nav class="bg-gray-800 flex">
+            <div class="bg-gray-800 text-white py-4 w-64 text-center">
+                <span class="text-lg font-semibold">Admin Panel</span>
+            </div>
+            <ul class="ml-auto mr-5">
+                <li><a class="text-white block py-4 px-4" href="/">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div id="app" class="flex overflow-y-auto flex-[1]"></div>
 </body>
 
 </html>

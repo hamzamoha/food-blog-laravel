@@ -22,8 +22,6 @@ return new class extends Migration
             $table->integer("serving_size");
             $table->string("tags");
             $table->string("image_url");
-            $table->foreignId("category_id");
-            $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
             $table->softDeletes();
         });

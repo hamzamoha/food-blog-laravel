@@ -5,7 +5,7 @@
                 class="fa-solid fa-plus"></i> Add</button>
     </div>
     <div v-if="showNewCategoryForm" class="mb-3">
-        <form method="POST" action="/admin/recipes/category" enctype="multipart/form-data" class="p-3 bg-neutral-100">
+        <form method="POST" action="/api/recipes/categories" enctype="multipart/form-data" class="p-3 bg-neutral-100">
             <input type="hidden" name="_token" :value="csrf_token">
             <label for="label"
                 class="relative block bg-white mb-2 overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-blue-600">
@@ -83,7 +83,7 @@
                     <button @click="edit(category)"
                         class="inline-block py-1 px-2 bg-neutral-200 rounded hover:bg-neutral-100">Edit</button>
                     <form class="inline-block ml-2" @submit="deleteCategory($event)" v-if="category.recipes_count === 0"
-                        :action="'/admin/recipes/category/' + category.id" method="POST">
+                        :action="'/api/recipes/categories/' + category.id" method="POST">
                         <input type="hidden" name="_method" value="delete" />
                         <input type="hidden" name="_token" :value="csrf_token">
                         <button class="inline-block py-1 px-2 bg-red-400 rounded hover:bg-red-300">Delete</button>
@@ -95,7 +95,7 @@
     <div v-if="category_edit"
         :class="'fixed pt-8 top-0 left-0 w-full h-full transition-all animate-pop bg-black bg-opacity-20'">
         <div class="bg-white p-6 border shadow-lg max-w-auto w-[600px] overflow-y-auto flex-0 mx-auto rounded-lg">
-            <form method="POST" enctype="multipart/form-data" :action="'/admin/recipes/category/' + category_edit.id">
+            <form method="POST" enctype="multipart/form-data" :action="'api/recipes/categories/' + category_edit.id">
                 <input type="hidden" name="_method" value="put" />
                 <input type="hidden" name="_token" :value="csrf_token">
                 <div class="grid grid-cols-2 gap-2">
@@ -173,7 +173,7 @@ export default {
     },
     methods: {
         fetchCategories() {
-            fetch("/api/categories")
+            fetch("/api/recipes/categories")
                 .then(res => res.json())
                 .then(data => { this.categories = data })
         },
@@ -192,7 +192,7 @@ export default {
                 };
             }
             else {
-                imagePreview[index] = null
+                this.imagePreview[index] = null
             }
         },
         drop(ev) {

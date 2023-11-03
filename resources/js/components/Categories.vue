@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         fetchCategories() {
-            fetch("/api/categories")
+            fetch("/api/recipes/categories")
                 .then(res => res.json())
                 .then(data => { this.categories = data })
         }

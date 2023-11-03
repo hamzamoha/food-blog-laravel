@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
@@ -14,8 +14,8 @@ class Category extends Model
         "label", "slug", "description", "image_url"
     ];
 
-    public function recipes(): HasMany
+    public function recipes(): BelongsToMany
     {
-        return $this->hasMany(Recipe::class);
+        return $this->belongsToMany(Recipe::class, "recipes_categories");
     }
 }

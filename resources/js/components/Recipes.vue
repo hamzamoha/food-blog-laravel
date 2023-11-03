@@ -24,7 +24,7 @@
                     </td>
                     <td class="px-3 py-2">{{ recipe.title }}</td>
                     <td class="px-3 py-2 italic">
-                        <a :href="'#/categories/' + recipe.category.slug" class="hover:underline">{{ recipe.category.label }}</a>
+                        <a v-for="(category, index) in recipe.categories" :key="index" :href="'#/categories/' + category.slug" class="hover:underline">{{ category.label }}</a>
                     </td>
                     <td class="px-3 py-2">{{ (new Date((recipe.created_at))).toLocaleString() }}</td>
                     <td class="px-3 py-2">341<i class="ml-1 fa-regular fa-eye"></i></td>
