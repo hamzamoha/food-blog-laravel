@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("slug");
             $table->string("description");
             $table->string("image_url");
+            $table->string("for");
             $table->timestamps();
             $table->softDeletes();
         });

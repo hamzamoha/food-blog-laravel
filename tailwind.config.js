@@ -20,7 +20,7 @@ export default {
   plugins: [
     plugin(function groupPeer({ addVariant }) {
       let pseudoVariants = [
-        "checked",
+        "checked","hover"
       ].map((variant) =>
         Array.isArray(variant) ? variant : [variant, `&:${variant}`],
       );

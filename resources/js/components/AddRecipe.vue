@@ -88,38 +88,10 @@
                             <tr>
                                 <td class="w-[1%] py-5 px-4 align-top">Content</td>
                                 <td class="py-5 px-4">
-                                    <div class="text-center py-1">
-                                        <div
-                                            class="relative inline-flex justify-content items-center rounded-full p-1 bg-neutral-200">
-                                            <div
-                                                :class="'absolute transition-all h-[calc(100%-.5rem)] w-20 top-1 rounded-full bg-amber-400 ' + (show_code ? 'left-1/2' : 'left-1')">
-                                            </div>
-                                            <button type="button" @click="show_code = false"
-                                                :class="'w-20 transition-all text-center relative py-2 px-4 rounded-full mr-1' + (show_code ? '' : ' text-white')">Text</button>
-                                            <button type="button" @click="show_code = true"
-                                                :class="'w-20 transition-all text-center relative py-2 px-4 rounded-full' + (show_code ? ' text-white' : '')">Code</button>
-                                        </div>
-                                    </div>
-                                    <div v-if="show_code">
-                                        <div>
-                                            <button
-                                                class="py-2 px-3 rounded bg-blue-400 ml-3 hover:bg-blue-500 active:bg-blue-400"
-                                                type="button"
-                                                @click="(async () => { editor.data = await prettify(editor.data) })"><i
-                                                    class="fa-regular fa-chevrons-right fa-2xs mr-1"></i>Format</button>
-                                        </div>
-                                        <div class="relative h-[400px] code">
-                                            <textarea placeholder="Enter HTML Source Code" id="editing" spellcheck="false"
-                                                class="h-[350px]" v-model="editor.data" name="content"
-                                                @input="update(); sync_scroll($event.target);"
-                                                @scroll="sync_scroll($event.target);"
-                                                @keydown="check_tab($event.target, $event);"></textarea>
-                                            <pre class="language-html" id="highlighting" aria-hidden="true"><code class="language-html" id="highlighting-content" v-html="Prism.highlight(editor.data, Prism.languages.html, 'html')"></code></pre>
-                                        </div>
-                                    </div>
-                                    <div class="border" v-else>
-                                        <ckeditor style="--ck-spacing-unit: 20px" :editor="editor.instance" @ready="onReady"
-                                            v-model="editor.data" :config="editor.config"></ckeditor>
+                                    <div class="relative">
+                                        <textarea class="h-0 w-0 absolute overflow-hidden opacity-0 invisible"
+                                            v-model="editor.data" name="content"></textarea>
+                                        <div class="editor"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -130,11 +102,11 @@
                     <div class="py-2">Difficulty</div>
                     <div class="px-4">
                         <div class="flex flex-wrap py-4">
-                            <input
-                                :class="['accent-green-500', 'accent-amber-500', 'accent-red-500'][recipe_difficulty]"
+                            <input :class="['accent-green-500', 'accent-amber-500', 'accent-red-500'][recipe_difficulty]"
                                 type="range" min="0" max="2" v-model="recipe_difficulty"><span class="ml-2">{{ ['Easy',
                                     'Medium', 'Hard'][recipe_difficulty] }}</span>
-                            <input type="hidden" name="difficulty_level" :value="['easy', 'medium', 'hard'][recipe_difficulty]">
+                            <input type="hidden" name="difficulty_level"
+                                :value="['easy', 'medium', 'hard'][recipe_difficulty]">
                         </div>
                     </div>
                     <div class="py-2">Cooking Time (in Minutes)</div>
@@ -211,11 +183,33 @@
 }
 </style>
 <script>
-import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
+function handleSampleError(error) {
+    const issueUrl = 'https://github.com/ckeditor/ckeditor5/issues';
+
+    const message = [
+        'Oops, something went wrong!',
+        `Please, report the following error on ${issueUrl} with the build id "c4uo8i91sfq2-27hfa2v992vh" and the error stack trace:`
+    ].join('\n');
+
+    console.error(message);
+    console.error(error);
+}
+const watchdog = new window.CKSource.EditorWatchdog();
+window.watchdog = watchdog;
+watchdog.setCreator((element, config) => {
+    return CKSource.Editor
+        .create(element, config)
+        .then(editor => {
+            return editor;
+        });
+});
+watchdog.setDestructor(editor => {
+    return editor.destroy();
+});
+watchdog.on('error', handleSampleError);
+import SimpleUploadAdapterPlugin from "../ckeditor-upload-adapter"
 import Prism from 'prismjs'
 import "../../css/code.css"
-import * as prettier from "prettier";
-import prettierHtmlPlugin from "prettier/plugins/html"
 export default {
     name: "AddRecipe",
     data() {
@@ -226,25 +220,18 @@ export default {
             recipe_ingredients: [],
             addIngredient: false,
             ingredients: {},
-            recipe_categories: [1, 3],
+            recipe_categories: [],
             recipe_cookingMethods: ['Bake', 'Sauté'],
             search_query: "",
             recipe_difficulty: 1,
             cookingMethods: ['Bake', 'Boil', 'Braise', 'Broil', 'Fry', 'Grill', 'Roast', 'Poach', 'Sauté', 'Steam', 'Stir-Fry', 'Simmer'],
             categories: [],
-            recipe_tags: ['Homemade', 'Family Dinner'],
-            show_code: false,
-            highlighted_code: '',
+            recipe_tags: [],
             editor: {
-                instance: DecoupledEditor,
                 data: `<p style="margin-left:0px;"><span class="text-big"><i><strong>Hearty &amp; Flavorful</strong></i></span></p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;">Spaghetti Bolognese, a cherished Italian classic, unites al dente spaghetti with a rich, savory sauce. Whether you're a seasoned chef or a kitchen novice, this recipe guarantees to impress.</p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;"><span class="text-big"><i><strong>The Secret's in the Sauce</strong></i></span></p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;">The magic begins with a browned meat base and a trio of finely chopped vegetables—onions, carrots, and celery. Garlic adds its aromatic allure. Crushed tomatoes and tomato paste infuse the sauce with richness, while dried oregano, basil, and optional red pepper flakes provide Mediterranean charm. A dash of red wine (if you're feeling adventurous) and slow simmering for up to 2 hours yield a velvety, flavor-packed sauce.</p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;"><span class="text-big"><i><strong>Perfect Pairing</strong></i></span></p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;">Cook spaghetti to al dente perfection, marrying it with the sauce. For the finishing touch, sprinkle with Parmesan cheese and fresh basil. Spaghetti Bolognese epitomizes comfort and flavor. Share the joy by recreating Italy's essence in your kitchen. Buon appetito!</p><p style="margin-left:0px;"><br data-cke-filler="true"></p>`,
-                config: {
-                    toolbar: ['undo', 'redo', '|', 'selectAll', '|', 'heading', '|', 'bold', 'italic', 'strikethrough', 'underline', '|', 'bulletedList', 'numberedList', '|', 'outdent', 'indent', '|', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'alignment', '|', 'link', 'blockQuote', 'insertTable', '|']
-                }
             }
         }
     },
-    components: { Prism },
     methods: {
         fetchIngredients() {
             fetch("/api/ingredients")
@@ -276,36 +263,6 @@ export default {
                 event.target.value = ""
             }
         },
-        onReady(editor) {
-            editor.ui.getEditableElement().parentElement.insertBefore(
-                editor.ui.view.toolbar.element,
-                editor.ui.getEditableElement()
-            );
-        },
-        update() {
-            if (this.editor.data[this.editor.data.length - 1] == "\n") this.editor.data += " "
-        },
-        sync_scroll(element) {
-            let result_element = document.querySelector("#highlighting");
-            result_element.scrollTop = element.scrollTop;
-            result_element.scrollLeft = element.scrollLeft;
-        },
-        check_tab(element, event) {
-            let code = this.editor.data;
-            if (event.key == "Tab") {
-                event.preventDefault();
-                let before_tab = code.slice(0, element.selectionStart);
-                let after_tab = code.slice(element.selectionEnd, this.editor.data.length);
-                let cursor_pos = element.selectionStart + 1;
-                this.editor.data = before_tab + "\t" + after_tab;
-                element.selectionStart = cursor_pos;
-                element.selectionEnd = cursor_pos;
-                update();
-            }
-        },
-        async prettify(html) {
-            return (await prettier.format(html, { parser: "html" , plugins: [prettierHtmlPlugin] , bracketSameLine: true, proseWrap: "never", singleAttributePerLine: true})).slice(0,-1);
-        },
         imageSelected(event) {
             const ref = this
             const input = event.target;
@@ -336,6 +293,18 @@ export default {
     mounted() {
         this.fetchIngredients()
         this.fetchCategories()
+        watchdog
+            .create(document.querySelector('.editor'), {
+                initialData: "I am an initial text",
+                extraPlugins: [ SimpleUploadAdapterPlugin ],
+            })
+            .then(() => {
+                watchdog.editor.model.document.on('change:data', () => {
+                    this.editor.data = watchdog.editor.getData();
+                    console.log('changed');
+                });
+            })
+            .catch(handleSampleError);
     },
 }
 </script>

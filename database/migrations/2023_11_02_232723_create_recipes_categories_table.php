@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('recipes_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId("recipe_id");
-            $table->foreign('recipe_id')->references('id')->on('recipes');
+            $table->foreign('recipe_id')->references('id')->on('recipes')->onDelete("cascade");
             $table->foreignId("category_id");
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete("cascade");
             $table->unique(['recipe_id', 'category_id']);
             $table->timestamps();
         });

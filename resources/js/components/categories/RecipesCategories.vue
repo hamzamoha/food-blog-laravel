@@ -95,7 +95,7 @@
     <div v-if="category_edit"
         :class="'fixed pt-8 top-0 left-0 w-full h-full transition-all animate-pop bg-black bg-opacity-20'">
         <div class="bg-white p-6 border shadow-lg max-w-auto w-[600px] overflow-y-auto flex-0 mx-auto rounded-lg">
-            <form method="POST" enctype="multipart/form-data" :action="'api/recipes/categories/' + category_edit.id">
+            <form method="POST" enctype="multipart/form-data" :action="'/api/recipes/categories/' + category_edit.id">
                 <input type="hidden" name="_method" value="put" />
                 <input type="hidden" name="_token" :value="csrf_token">
                 <div class="grid grid-cols-2 gap-2">

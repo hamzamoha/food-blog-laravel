@@ -5,6 +5,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue';
 import App from './components/Admin.vue'
 
 import Articles from './components/Articles.vue';
+import AddArticle from './components/AddArticle.vue';
 import Categories from './components/Categories.vue';
 import Dashboard from './components/Dashboard.vue';
 import Recipes from './components/Recipes.vue';
@@ -56,6 +57,11 @@ const router = createRouter({
             path: '/articles',
             alias: '/articles/*',
             component: Articles
+        },
+        {
+            path: '/articles/create',
+            alias: '/articles/create/*',
+            component: AddArticle
         },
         {
             path: '/',

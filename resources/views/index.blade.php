@@ -4,77 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cuisine Compass | Taste the World | Food Blog</title>
     @vite('resources/css/app.css')
     <link rel="stylesheet" href="/fontawesome/css/all.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="/script.js"></script>
 </head>
 
 <body>
-    <header class="max-w-6xl mx-auto">
-        <div class="flex flex-wrap items-center justify-between py-10 w-full border-b">
-            <div class="mb-5 lg:mb-0 w-full lg:w-auto lg:mr-1">
-                <a href="/" class="block"><img src="/images/logo.svg" alt="Logo" class="block mx-auto lg:pl-1 block h-16"></a>
-            </div>
-            <div id="search_form" class="w-full mb-4 md:my-0 md:w-auto md:mr-auto md:ml-1 lg:mr-0 lg:ml-auto">
-                <form class="border flex" action="search">
-                    <select name="category" id="category" class="px-3 py-2 lg:py-3 lg:px-2 text-xs font-semibold outline-none uppercase border-white border-2 bg-neutral-100 transition-all hover:bg-neutral-200 cursor-pointer">
-                        <option value="all" selected>All Categories</option>
-                        <option class="text-[2px]" disabled></option>
-                        <option value="desserts">Desserts</option>
-                        <option class="text-[2px]" disabled></option>
-                        <option value="diets">Diets</option>
-                        <option class="text-[2px]" disabled></option>
-                        <option value="breakfast">Breakfast</option>
-                        <option class="text-[2px]" disabled></option>
-                        <option value="11">Salads</option>
-                        <option class="text-[2px]" disabled></option>
-                        <option value="drinks">Drinks</option>
-                        <option class="text-[2px]" disabled></option>
-                        <option value="fast_food">Fast Food</option>
-                    </select>
-                    <input placeholder="Search recipes..." type="text" id="q" name="q" class="flex-1 px-1 py-3 border-none bg-none focus:outline-none w-72 text-sm">
-                    <button type="submit" class="w-12 h-12 bg-yellow-300 transition-all hover:bg-amber-200">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </form>
-            </div>
-            <div class="w-full md:w-auto">
-                <ul class="flex items-center pl-3 justify-center">
-                    <li class="border-r">
-                        <a href="/" class="py-2 px-3 transition-all hover:text-neutral-500">Home</a>
-                    </li>
-                    <li class="border-r">
-                        <a href="/" class="py-2 px-3 transition-all hover:text-neutral-500">About Us</a>
-                    </li>
-                    <li>
-                        <a href="/" class="py-2 px-3 transition-all hover:text-neutral-500">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <nav class="flex items-center">
-            <ul class="flex items-center">
-                <li class="mr-3"><a href="/" class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Home</a>
-                </li>
-                <li class="mr-3"><a href="/" class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Categories</a>
-                </li>
-                <li class="mr-3"><a href="/" class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Recipes</a>
-                </li>
-                <li><a href="/" class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Link</a>
-                </li>
-            </ul>
-            <ul class="flex items-center ml-auto">
-                <li><a href="/" class="p-1 transition-all hover:text-amber-300 mr-1 block"><i class="fa-sm fa-brands fa-instagram"></i></a></li>
-                <li><a href="/" class="p-1 transition-all hover:text-amber-300 mr-1 block"><i class="fa-sm fa-brands fa-facebook-f"></i></a></li>
-                <li><a href="/" class="p-1 transition-all hover:text-amber-300 block"><i class="fa-sm fa-brands fa-x-twitter"></i></a></li>
-                <li><a href="/" class="p-1 transition-all hover:text-amber-300 block"><i class="fa-sm fa-brands fa-pinterest"></i></a></li>
-                <li><a href="/" class="p-1 transition-all hover:text-amber-300 block"><i class="fa-sm fa-brands fa-tiktok"></i></a></li>
-                <li><a href="/" class="p-1 transition-all hover:text-amber-300 block"><i class="fa-sm fa-brands fa-youtube"></i></a></li>
-            </ul>
-        </nav>
-    </header>
+    @include('inc.header')
     <section class="relative h-[600px]">
         <img class="w-full h-full object-cover" src="/images/blackforest-peanut-cake.jpg" alt="Blackforest Peanut Cake" title="Blackforest Peanut Cake">
         <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[rgba(0,0,0,.8)] via-transparent to-[rgba(0,0,0,.8)]">
@@ -98,7 +36,7 @@
                     </div>
                 </div>
                 <div class="text-center py-1">
-                    <a href="/" class="px-7 py-3 bg-amber-400 inline-block transition-all hover:bg-amber-300 hover:text-neutral-600">See
+                    <a href="/recipe" class="px-7 py-3 bg-amber-400 inline-block transition-all hover:bg-amber-300 hover:text-neutral-600">See
                         the Recipe <i class="fa-solid fa-angles-right fa-xs"></i></a>
                 </div>
             </div>
@@ -111,7 +49,9 @@
                     <img src="{{ $recipe->image_url }}" alt="" class="block w-full h-64 mb-3 object-cover">
                     <div class="text-neutral-500 text-sm uppercase">
                         <span class="inline-flex items-center mr-1"><i class="fa-solid mr-1 fa-hourglass-half"></i>{{ $recipe->cooking_time }} mins</span>
-                        <a href="/category/{{ $recipe->category->slug }}" class="inline-flex items-center"><i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i> {{ $recipe->category->label }}</a>
+                        @foreach ($recipe->categories as $category)
+                        <a href="/category/{{ $category->slug }}" class="inline-flex items-center"><i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i> {{ $category->label }}</a>
+                        @endforeach
                     </div>
                     <h3 class="text-2xl font-light py-2 leading-tight"><?= $recipe->title ?></h3>
                     <p class="text-sm text-neutral-600 py-1 leading-tight line-clamp-2"><?= $recipe->description ?></p>
@@ -330,71 +270,7 @@
                 </div>
             </article>
         </main>
-        <aside>
-            <div class="relative px-5 pb-5 pt-10 border">
-                <span class="absolute block -top-3 left-1/2 -translate-x-1/2 bg-white px-4 uppercase text-sm font-semibold tracking-wider">Categories</span>
-                <div class="grid grid-cols-3 gap-5">
-                    <div class="text-center transition-all hover:-translate-y-1 cursor-pointer">
-                        <img src="/images/categories/salads.svg" alt="Salads" class="w-16 h-16 mx-auto block">
-                        <span class="block py-1">Salads</span>
-                    </div>
-                    <div class="text-center transition-all hover:-translate-y-1 cursor-pointer">
-                        <img src="/images/categories/fast-food.svg" alt="Fast Food" class="w-16 h-16 mx-auto block">
-                        <span class="block py-1">Fast Food</span>
-                    </div>
-                    <div class="text-center transition-all hover:-translate-y-1 cursor-pointer">
-                        <img src="/images/categories/breakfast.svg" alt="Breakfast" class="w-16 h-16 mx-auto block">
-                        <span class="block py-1">Breakfast</span>
-                    </div>
-                    <div class="text-center transition-all hover:-translate-y-1 cursor-pointer">
-                        <img src="/images/categories/soups.svg" alt="Breakfast" class="w-16 h-16 mx-auto block">
-                        <span class="block py-1">Soups</span>
-                    </div>
-                    <div class="text-center transition-all hover:-translate-y-1 cursor-pointer">
-                        <img src="/images/categories/meat.svg" alt="Breakfast" class="w-16 h-16 mx-auto block">
-                        <span class="block py-1">Meat</span>
-                    </div>
-                    <div class="text-center transition-all hover:-translate-y-1 cursor-pointer">
-                        <img src="/images/categories/drinks.svg" alt="Breakfast" class="w-16 h-16 mx-auto block">
-                        <span class="block py-1">Drinks</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-neutral-100 p-10 text-center my-5">
-                <h3 class="text-2xl font-medium py-2">Never Miss a Post</h3>
-                <p class="text-sm text-neutral-600 py-2">Signup for free and be the first to get notified on new
-                    updates.</p>
-                <input class="p-3 bg-white w-full my-4 leading-relaxed outline-none" placeholder="Your Email*" type="email" name="email" id="email">
-                <button class="bg-neutral-800 text-white py-3 px-1 w-full">Subscribe</button>
-            </div>
-            <div class="my-5">
-                <img src="/images/get-app.png" alt="Get APP" class="block">
-            </div>
-            <div class="relative px-5 pb-5 pt-10 border mt-10 mb-5">
-                <span class="absolute block -top-3 left-1/2 -translate-x-1/2 bg-white px-4 uppercase text-sm font-semibold tracking-wider">Follow
-                    Me</span>
-                <div class="flex justify-between items-center">
-                    <a href="/" class="block w-12 h-12 flex hover:text-neutral-100 items-center justify-center relative before:absolute before:block before:inset-0 before:w-full before:h-full before:opacity-0 before:content-[''] before:bg-gradient-to-tr before:bg-gradient-to-tr before:from-[#ff7a00] before:via-[#ff0069] before:to-[#d300c5] before:transition-all hover:before:opacity-100">
-                        <i class="fa-brands fa-instagram fa-lg transition-all relative"></i>
-                    </a>
-                    <a href="/" class="block w-12 h-12 flex hover:text-neutral-100 items-center justify-center relative before:absolute before:block before:inset-0 before:w-full before:h-full before:opacity-0 before:content-[''] before:bg-gradient-to-tr before:bg-gradient-to-tr before:from-[#333333] before:to-[#111111] before:transition-all hover:before:opacity-100">
-                        <i class="fa-brands fa-x-twitter fa-lg transition-all relative"></i>
-                    </a>
-                    <a href="/" class="block w-12 h-12 flex hover:text-neutral-100 items-center justify-center relative before:absolute before:block before:inset-0 before:w-full before:h-full before:opacity-0 before:content-[''] before:bg-gradient-to-tr before:bg-gradient-to-tr before:from-[#3b5998] before:to-[#2b4170] before:transition-all hover:before:opacity-100">
-                        <i class="fa-brands fa-facebook-f fa-lg transition-all relative"></i>
-                    </a>
-                    <a href="/" class="block w-12 h-12 flex hover:text-neutral-100 items-center group justify-center relative before:absolute before:block before:inset-0 before:w-full before:h-full before:opacity-0 before:content-[''] before:bg-gradient-to-tr before:bg-gradient-to-tr before:to-[#EE1D52] before:from-[#69C9D0] before:transition-all hover:before:opacity-100">
-                        <i class="fa-brands fa-tiktok fa-lg transition-all relative"></i>
-                    </a>
-                    <a href="/" class="block w-12 h-12 flex hover:text-neutral-100 items-center justify-center relative before:absolute before:block before:inset-0 before:w-full before:h-full before:opacity-0 before:content-[''] before:bg-gradient-to-tr before:bg-gradient-to-tr before:to-[#E60023] before:from-[#ef4444] before:transition-all hover:before:opacity-100">
-                        <i class="fa-brands fa-pinterest fa-lg transition-all relative"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="my-5">
-                <img src="./images/find-us-on-youtube.jpg" alt="Find Us On Youtube" class="block">
-            </div>
-        </aside>
+        @include('inc.aside')
     </div>
     <section class="bg-slate-200 py-10">
         <div class="text-center max-w-6xl mx-auto">
@@ -479,26 +355,7 @@
             </div>
         </div>
     </section>
-    <footer class="py-3 text-sm font-medium border-t border-neutral-400">
-        <nav class="max-w-6xl mx-auto flex flex-wrap items-center">
-            <span class="flex-0 md:flex-1 block w-full md:w-auto text-center py-1 md:py-0 md:text-left mr-0 md:mr-auto">&copy; 2023 <a href="/">Cuisine Compass</a></span>
-            <ul class="flex-0 md:flex-1 flex justify-center w-full md:w-auto py-1 md:py-0">
-                <li class="px-1"><a class="hover:underline px-2 py-2 block" href="/">Home</a></li>
-                <li class="px-1"><a class="hover:underline px-2 py-2 block" href="/">Categories</a></li>
-                <li class="px-1"><a class="hover:underline px-2 py-2 block" href="/">Recipes</a></li>
-                <li class="px-1"><a class="hover:underline px-2 py-2 block" href="/">Contact</a></li>
-                <li class="px-1"><a class="hover:underline px-2 py-2 block" href="/">About</a></li>
-            </ul>
-            <ul class="flex-0 md:flex-1 flex justify-center w-full md:w-auto md:justify-end ml-auto py-1 md:py-0">
-                <li><a href="/" class="p-1"><i class="fa-brands fa-facebook-f"></i></a></li>
-                <li><a href="/" class="p-1"><i class="fa-brands fa-instagram"></i></a></li>
-                <li><a href="/" class="p-1"><i class="fa-brands fa-x-twitter"></i></a></li>
-                <li><a href="/" class="p-1"><i class="fa-brands fa-youtube"></i></a></li>
-                <li><a href="/" class="p-1"><i class="fa-brands fa-tiktok"></i></a></li>
-                <li><a href="/" class="p-1"><i class="fa-brands fa-pinterest"></i></a></li>
-            </ul>
-        </nav>
-    </footer>
+    @include('inc.footer')
 </body>
 
 </html>
