@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,9 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ckeditor_images', function (Blueprint $table) {
+        Schema::create('views', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('viewable_table');
+            $table->unsignedBigInteger("viewable_id")->nullable();
+            $table->unsignedBigInteger("views_count")->default(0);
+            $table->date("viewed_at")->default(DB::raw('CURRENT_DATE'));
         });
     }
 
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ckeditor_images');
+        Schema::dropIfExists('views');
     }
 };

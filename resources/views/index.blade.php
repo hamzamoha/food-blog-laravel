@@ -2,13 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Cuisine Compass | Taste the World | Food Blog</title>
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="/fontawesome/css/all.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta property="og:title" content="Cuisine Compass | Taste the World | Food Blog" />
+    <meta property="og:description" content="Cuisine Compass | Taste the World | Food Blog" />
+    <meta property="og:image" content="" />
+    @include('inc.common_head_tags')
 </head>
 
 <body>
@@ -63,7 +61,7 @@
                         </div>
                     </div>
                     <div class="text-center py-1">
-                        <a href="/recipe/<?= $recipe->slug ?>" class="px-7 py-3 bg-amber-400 inline-block transition-all hover:bg-amber-300 hover:text-neutral-600">See
+                        <a href="/recipes/<?= $recipe->slug ?>" class="px-7 py-3 bg-amber-400 inline-block transition-all hover:bg-amber-300 hover:text-neutral-600">See
                             the Recipe <i class="fa-solid fa-angles-right fa-xs"></i></a>
                     </div>
                 </article>

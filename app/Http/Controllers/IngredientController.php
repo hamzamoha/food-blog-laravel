@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class IngredientController extends Controller
 {
@@ -12,7 +14,7 @@ class IngredientController extends Controller
      */
     public function index()
     {
-        return json_encode(Ingredient::all());
+        return json_encode(Ingredient::withCount("recipes")->get());
     }
 
     /**
@@ -28,7 +30,20 @@ class IngredientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required',
+            'category' => 'required',
+            'image' => ['required', File::image()],
+        ]);
+        $image = $request->file('image');
+        $ingredient = Ingredient::create([
+            "name" => Str::title($request->input("name")),
+            "image_url" => "",
+            "category" => Str::lower($request->input("category")),
+        ]);
+        $ingredient->image_url = "/" . $image->storeAs("uploads", "ingredient-" . Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension());
+        $ingredient->save();
+        return redirect("/admin")->withFragment("#/ingredients/");
     }
 
     /**
@@ -50,9 +65,18 @@ class IngredientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Ingredient $ingredient)
+    public function update(Request $request, int $id)
     {
-        //
+        $ingredient = Ingredient::find($id);
+        $ingredient->name = Str::title($request->input("name"));
+        $ingredient->category = Str::squish($request->input("category"));
+        if ($request->hasFile("image")) {
+            $request->validate(["image" => [File::image()]]);
+            $image = $request->file('image');
+            $ingredient->image_url = "/" . $image->storeAs("uploads", "ingredient-" . Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension());
+        }
+        $ingredient->save();
+        return redirect("/admin")->withFragment("#/ingredients");
     }
 
     /**

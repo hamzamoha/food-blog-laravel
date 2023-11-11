@@ -8,6 +8,7 @@ use HTMLPurifier;
 use HTMLPurifier_Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\File;
 
@@ -34,9 +35,17 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
+        $slug = Str::slug($request->input("title", ""));
+        if(Recipe::where('slug', $slug)->exists()){
+            $count = 1;
+            while (Recipe::where('slug', "$slug-$count")->exists()) {
+                $count += 1;
+            }
+            $slug = $slug-$count;
+        }
         $recipe = Recipe::create([
             "title" => Str::title($request->input("title", "")),
-            "slug" => Str::slug($request->input("title", "")),
+            "slug" => $slug,
             "description" => trim($request->input("description", "")),
             "cooking_time" => intval($request->input("cooking_time", "15")),
             "difficulty_level" => Str::lower($request->input("difficulty_level", "medium")),

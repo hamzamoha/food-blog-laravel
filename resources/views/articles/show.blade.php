@@ -1,15 +1,12 @@
-<!DOCTYPE html>
+a<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Show Article</title>
-    @vite('resources/css/ckeditor-tailwind-reset.css')
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="/fontawesome/css/all.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta property="og:title" content="{{ $article->title }}" />
+    <meta property="og:description" content="{{ $article->description }}" />
+    <meta property="og:image" content="{{ $article->image_url }}" />
+    @include('inc.common_head_tags')
 </head>
 
 <body>
@@ -19,19 +16,20 @@
             <main class="bg-white pb-10">
                 <div class="text-center">
                     <span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">Baking</a>
-                        <span>&nbsp;|&nbsp;</span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">Room Temperature</a>
-                        <span>&nbsp;|&nbsp;</span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">reheating</a>
-                        <span>&nbsp;|&nbsp;</span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">Cooking Tips</a>
+                        @foreach ($article->categories as $key => $category)
+                            <a class="font-bold text-sm text-blue-400 uppercase"
+                                href="#">{{ $category->label }}</a>
+                            @if ($key < count($article->categories) - 1)
+                                <span>&nbsp;|&nbsp;</span>
+                            @endif
+                        @endforeach
                     </span>
                 </div>
-                <h1 class="text-center py-2 font-extralight text-4xl">The Potato Diet: A Simple and Sustainable Approach
-                    to Weight Loss</h1>
-                <p class="text-center py-2 text-neutral-500 font-light">Published on October 11, 2023 &nbsp;&bull;&nbsp;
-                    Updated on October 22, 2023</p>
+                <h1 class="text-center py-2 font-extralight text-4xl">
+                    {{ \Illuminate\Support\Str::title($article->title) }}</h1>
+                <p class="text-center py-2 text-neutral-500 font-light">Published on
+                    {{ date('F d, Y', strtotime($article->created_at)) }} &nbsp;&bull;&nbsp;
+                    Updated on {{ date('F d, Y', strtotime($article->created_at)) }}</p>
                 <div class="ck-content text-lg font-light py-5">
                     <h2>Introduction</h2>
                     <p>Diet trends come and go, promising quick fixes and miraculous results, but few can boast the
@@ -108,37 +106,54 @@
                         starting any diet, and remember that the key to successful weight management lies in balanced
                         and varied eating habits in the long term.</p>
                 </div>
-                <div class="flex items-center flex-wrap my-5">
-                    <div class="mr-auto py-3">
-                        <span class="font-semibold">Tags:</span> cooking, pasta, family, dinner
-                    </div>
-                    <div class="py-3">
-                        Share:
-                        <div class="inline-flex items-center">
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-facebook-f"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-x-twitter"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-instagram"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-whatsapp"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-pinterest"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-snapchat"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-tiktok"></i></a>
+                <div class="py-3">
+                    <span class="font-semibold">Tags:</span>
+                    {{ \Illuminate\Support\Str::title(str_replace(',', ', ', $article->tags)) }}
+                </div>
+                <section class="py-6">
+                    <h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!
+                    </h4>
+                    <div class="flex flex-wrap py-2 items-center">
+                        <div class="m-1">
+                            <div class="fb-share-button"
+                                data-href="https://www.allrecipes.com/article/cup-to-gram-conversions/"
+                                data-layout="button_count" data-size="large">
+                            </div>
+                        </div>
+                        <div class="m-1">
+                            <div class="fb-save" data-uri="http://www.your-domain.com/your-page.html" data-size="large">
+                            </div>
+                        </div>
+                        <div class="m-1">
+                            <a class="twitter-share-button" data-size="large"
+                            href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::title($article->title) }}&via=Allrecipes&url={{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}">
+                            Tweet</a>
+                        </div>
+                        {{--
+                        <div class="m-1">
+                            <a class="block py-0.5 px-2.5 text-white bg-green-500 hover:bg-green-600 rounded-full" target="_blank"
+                                href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share"><i
+                                    class="fa-brands fa-whatsapp"></i> Share</a>
+                        </div>
+                        --}}
+                        <div class="m-1">
+                            <a class="block py-0.5 px-2.5 text-white bg-green-500 hover:bg-green-600 rounded-full"
+                                target="_blank" href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com"
+                                data-action="share/whatsapp/share"><i class="fa-brands fa-whatsapp"></i> Share</a>
+                        </div>
+                        <div class="m-1">
+                            <a href="https://www.pinterest.com/pin/create/button/" data-pin-tall="true"
+                                data-pin-do="buttonPin" media="{{ $article->image_url }}"
+                                description="{{ $article->title }}"> </a>
+                        </div>
+                        <div class="m-1">
+                            <div class="snapchat-creative-kit-share" data-size="large"></div>
+                        </div>
+                        <div class="m-1">
+                            <script type="IN/Share" data-url="{{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}"></script>
                         </div>
                     </div>
-                </div>
+                </section>
                 <section class="my-5">
                     <h4 class="py-2 text-2xl">Leave a Comment</h4>
                     <div>

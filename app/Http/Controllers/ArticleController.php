@@ -33,9 +33,17 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        $slug = Str::slug($request->input("title", ""));
+        if(Article::where('slug', $slug)->exists()){
+            $count = 1;
+            while (Article::where('slug', "$slug-$count")->exists()) {
+                $count += 1;
+            }
+            $slug = $slug-$count;
+        }
         $article = Article::create([
             "title" => Str::title($request->input("title", "")),
-            "slug" => Str::slug($request->input("title", "")),
+            "slug" => $slug,
             "tags" => Str::lower(trim($request->input("tags", ""))),
             "content" => (new HTMLPurifier(HTMLPurifier_Config::createDefault()))->purify($request->input("content")),
             "image_url" => '',

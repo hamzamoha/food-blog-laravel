@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\Storage;
 
 class StorageController extends Controller
 {
-    public function uploads(string $url)
+    public function uploads(Request $request, string $url)
     {
+        if($request->has("small")) $url = "small/$url";
         if (!Storage::exists("uploads/" . $url))
             return abort(404);
         return response(File::get(Storage::path("uploads/" . $url)))

@@ -89,7 +89,8 @@ class CategoryController extends Controller
         $category->slug = Str::slug($request->input("label"));
         $category->description = Str::squish($request->input("description"));
         if ($request->hasFile("image")) {
-            $image = $request->file('image');
+            $request->validate(["image" => [File::image()]]);
+            $image = $request->file('image');   
             $category->image_url = "/" . $image->storeAs("uploads", "category-" . $category->for . "-" . $category->slug . "-" . $category->id . "." . $image->getClientOriginalExtension());
         }
         $category->save();

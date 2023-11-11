@@ -9,6 +9,7 @@ import AddArticle from './components/AddArticle.vue';
 import Categories from './components/Categories.vue';
 import Dashboard from './components/Dashboard.vue';
 import Recipes from './components/Recipes.vue';
+import Ingredients from './components/Ingredients.vue';
 import AddRecipe from './components/AddRecipe.vue';
 import Users from './components/Users.vue';
 import RecipesCategories from './components/categories/RecipesCategories.vue';
@@ -42,6 +43,11 @@ const router = createRouter({
             path: '/users',
             alias: '/users/*',
             component: Users
+        },
+        {
+            path: '/ingredients',
+            alias: '/ingredients/*',
+            component: Ingredients
         },
         {
             path: '/recipes',

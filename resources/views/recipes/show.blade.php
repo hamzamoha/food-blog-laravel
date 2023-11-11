@@ -2,14 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Show Recipe</title>
-    @vite('resources/css/ckeditor-tailwind-reset.css')
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="/fontawesome/css/all.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta property="og:title" content="{{ $recipe->title }}" />
+    <meta property="og:description" content="{{ $recipe->description }}" />
+    <meta property="og:image" content="{{ $recipe->image_url }}" />
+    @include('inc.common_head_tags')
     <style>
         .rating-container {
             display: inline-flex;
@@ -118,48 +115,57 @@
             <main class="bg-white pb-10">
                 <div class="text-center">
                     <span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">Baking</a>
-                        <span>&nbsp;|&nbsp;</span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">Room Temperature</a>
-                        <span>&nbsp;|&nbsp;</span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">reheating</a>
-                        <span>&nbsp;|&nbsp;</span>
-                        <a class="font-bold text-sm text-blue-400 uppercase" href="#">Cooking Tips</a>
+                        @foreach ($recipe->categories as $key => $category)
+                            <a class="font-bold text-sm text-blue-400 uppercase"
+                                href="#">{{ $category->label }}</a>
+                            @if ($key < count($recipe->categories) - 1)
+                                <span>&nbsp;|&nbsp;</span>
+                            @endif
+                        @endforeach
                     </span>
                 </div>
-                <h1 class="text-center py-2 font-extralight text-4xl">One Skillet Mexican Beef and Rice</h1>
-                <p class="text-center py-2 text-neutral-500 font-light">Published on October 11, 2023 &nbsp;&bull;&nbsp;
-                    Updated on October 22, 2023</p>
-                <p class="font-light text-center">Rating:&nbsp;&nbsp;<i class="fa-solid fa-star"></i><i
+                <h1 class="text-center py-2 font-extralight text-4xl">
+                    {{ \Illuminate\Support\Str::title($recipe->title) }}</h1>
+                <p class="text-center py-2 text-neutral-500 font-light">Published on
+                    {{ date('F d, Y', strtotime($recipe->created_at)) }} &nbsp;&bull;&nbsp;
+                    Updated on {{ date('F d, Y', strtotime($recipe->updated_at)) }}</p>
+                <p class="font-light text-center">
+                    <span class="whitespace-nowrap">
+                        Views:&nbsp;&nbsp;{{ \App\Http\Controllers\ViewerController::viewAndGet($recipe->id, "recipes") }}&nbsp;</i><i class="fa-regular fa-eye"></i>
+                    </span>
+                    <span class="whitespace-nowrap inline-block"><span
+                        class="text-2xl">&nbsp;&bull;&nbsp;</span></span>
+                    <span class="whitespace-nowrap">
+                        Rating:&nbsp;&nbsp;<i class="fa-solid fa-star"></i><i
                         class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                        class="fa-solid fa-star-half-stroke"></i><i class="fa-regular fa-star"></i></p>
+                        class="fa-solid fa-star-half-stroke"></i><i class="fa-regular fa-star"></i>
+                    </span>
+                </p>
                 <div class="py-1 text-center">
                     <span class="whitespace-nowrap inline-block py-1 font-medium"><i
-                            class="fa-light fa-hourglass-half fa-sm mr-1"></i> Cooking Time: <span class="font-light">15
+                            class="fa-light fa-hourglass-half fa-sm mr-1"></i> Cooking Time: <span
+                            class="font-light">{{ $recipe->cooking_time }}
                             mins</span></span>
                     <span class="whitespace-nowrap inline-block py-1"><span
                             class="text-2xl">&nbsp;&bull;&nbsp;</span></span>
                     <span class="whitespace-nowrap inline-block py-1 font-medium"><i
                             class="fa-light fa-gear-complex fa-sm mr-1"></i> Cooking Method: <span
-                            class="font-light">Bake, Grill</span></span>
+                            class="font-light">{{ $recipe->cooking_method }}</span></span>
                     <span class="whitespace-nowrap inline-block py-1"><span
                             class="text-2xl">&nbsp;&bull;&nbsp;</span></span>
                     <span class="whitespace-nowrap inline-block py-1 font-medium"><i
                             class="fa-light fa-sliders fa-sm mr-1"></i> Difficulty Level: <span
-                            class="font-light">Medium</span></span>
+                            class="font-light">{{ $recipe->difficulty_level }}</span></span>
                     <span class="whitespace-nowrap inline-block py-1"><span
                             class="text-2xl">&nbsp;&bull;&nbsp;</span></span>
                     <span class="whitespace-nowrap inline-block py-1 font-medium"><i
                             class="fa-light fa-users fa-sm mr-1"></i> Serving Size: <span
-                            class="font-light">6</span></span>
+                            class="font-light">{{ $recipe->serving_size }}</span></span>
                 </div>
-                <p class="indent-10 text-lg font-light py-5">Experience Italian culinary charm with our Spaghetti
-                    Carbonara. Combining crispy pancetta, creamy eggs, Pecorino Romano cheese, and a dash of garlic and
-                    black pepper, it's a divine symphony of flavors and textures. This classic dish delivers Italian
-                    comfort at its best, ready to grace your dinner table.</p>
-                <img src="/images/crispy-pan-fried-penne-pasta.jpg"
+                <p class="indent-10 text-lg font-light py-5">{{ $recipe->description }}</p>
+                <img src="{{ $recipe->image_url }}"
                     class="w-[700px] max-w-full mx-auto my-5 rounded-sm block p-1 border shadow"
-                    alt="One Skillet Mexican Beef and Rice">
+                    alt="{{ $recipe->title }}" title="{{ $recipe->title }}">
                 <div class="ck-content text-lg font-light py-5">
                     <p style="margin-left:0px;">
                         <strong>Ingredients:</strong>
@@ -259,30 +265,13 @@
                 <section class="my-5 bg-green-400 p-3">
                     <h3 class="py-1 text-2xl font-semibold">Ingredients</h3>
                     <div class="flex flex-wrap py-4 items-center px-4  text-white">
-                        <div class="flex items-center mr-2">
-                            <img src="" alt="" class="w-8 h-8 rounded-full mr-2">
-                            <span>Salt</span>
-                        </div>
-                        <div class="flex items-center mr-2">
-                            <img src="" alt="" class="w-8 h-8 rounded-full mr-2">
-                            <span>Onions</span>
-                        </div>
-                        <div class="flex items-center mr-2">
-                            <img src="" alt="" class="w-8 h-8 rounded-full mr-2">
-                            <span>Pepper</span>
-                        </div>
-                        <div class="flex items-center mr-2">
-                            <img src="" alt="" class="w-8 h-8 rounded-full mr-2">
-                            <span>Eggs</span>
-                        </div>
-                        <div class="flex items-center mr-2">
-                            <img src="" alt="" class="w-8 h-8 rounded-full mr-2">
-                            <span>Cheese</span>
-                        </div>
-                        <div class="flex items-center mr-2">
-                            <img src="" alt="" class="w-8 h-8 rounded-full mr-2">
-                            <span>Garlic</span>
-                        </div>
+                        @foreach ($recipe->ingredients as $ingredient)
+                            <div class="flex items-center mr-2 mb-2">
+                                <img src="{{ $ingredient->image_url }}" alt="{{ $ingredient->name }}"
+                                    title="{{ $ingredient->name }}" class="w-10 h-10 rounded-full mr-2">
+                                <span>{{ $ingredient->name }}</span>
+                            </div>
+                        @endforeach
                     </div>
                 </section>
                 <section class="p-3 my-5 bg-yellow-100">
@@ -302,37 +291,53 @@
                             1 tsp </li>
                     </ol>
                 </section>
-                <div class="flex items-center flex-wrap my-5">
-                    <div class="mr-auto py-3">
-                        <span class="font-semibold">Tags:</span> cooking, pasta, family, dinner
-                    </div>
-                    <div class="py-3">
-                        Share:
-                        <div class="inline-flex items-center">
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-facebook-f"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-x-twitter"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-instagram"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-whatsapp"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-pinterest"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-snapchat"></i></a>
-                            <a href=""
-                                class="block w-8 h-8 flex text-center justify-center items-center transition-all hover:text-white hover:bg-neutral-800"><i
-                                    class="fa-brands fa-tiktok"></i></a>
+                <div class="py-3">
+                    <span class="font-semibold">Tags:</span>
+                    {{ \Illuminate\Support\Str::title(str_replace(',', ', ', $recipe->tags)) }}
+                </div>
+                <section class="py-6">
+                    <h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!</h4>
+                    <div class="flex flex-wrap py-2 items-center">
+                        <div class="m-1">
+                            <div class="fb-share-button"
+                                data-href="https://www.allrecipes.com/article/cup-to-gram-conversions/"
+                                data-layout="button_count" data-size="large">
+                            </div>
+                        </div>
+                        <div class="m-1">
+                            <div class="fb-save" data-uri="http://www.your-domain.com/your-page.html" data-size="large">
+                            </div>
+                        </div>
+                        <div class="m-1">
+                            <a class="twitter-share-button" data-size="large"
+                                href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::title($recipe->title) }}&via=Allrecipes&url={{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}">
+                                Tweet</a>
+                        </div>
+                        {{--
+                        <div class="m-1">
+                            <a class="block py-0.5 px-2.5 text-white bg-green-500 hover:bg-green-600 rounded-full" target="_blank"
+                                href="whatsapp://send?text=The text to share!" data-action="share/whatsapp/share"><i
+                                    class="fa-brands fa-whatsapp"></i> Share</a>
+                        </div>
+                        --}}
+                        <div class="m-1">
+                            <a class="block py-0.5 px-2.5 text-white bg-green-500 hover:bg-green-600 rounded-full"
+                                target="_blank" href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com"
+                                data-action="share/whatsapp/share"><i class="fa-brands fa-whatsapp"></i> Share</a>
+                        </div>
+                        <div class="m-1">
+                            <a href="https://www.pinterest.com/pin/create/button/" data-pin-tall="true"
+                                data-pin-do="buttonPin" media="{{ $recipe->image_url }}"
+                                description="{{ $recipe->title }}"> </a>
+                        </div>
+                        <div class="m-1">
+                            <div class="snapchat-creative-kit-share" data-size="large"></div>
+                        </div>
+                        <div class="m-1">
+                            <script type="IN/Share" data-url="{{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}"></script>
                         </div>
                     </div>
-                </div>
+                </section>
                 <section class="p-3 bg-neutral-100 my-5">
                     <div class="flex items-center flex-wrap bg-white p-3">
                         <span class="pr-7 text-2xl">Rate this recipe</span>
@@ -416,6 +421,7 @@
             @include('inc.aside')
         </div>
     </div>
+    <div id="fb-root"></div>
     @include('inc.footer')
 </body>
 

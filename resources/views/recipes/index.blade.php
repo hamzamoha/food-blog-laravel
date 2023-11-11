@@ -2,20 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Recipes</title>
-    @vite('resources/css/ckeditor-tailwind-reset.css')
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="/fontawesome/css/all.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"
-        integrity="sha512-j+F4W//4Pu39at5I8HC8q2l1BNz4OF3ju39HyWeqKQagW6ww3ZF9gFcu8rzUbyTDY7gEo/vqqzGte0UPpo65QQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css"
-        integrity="sha512-eMxdaSf5XW3ZW1wZCrWItO2jZ7A9FhuZfjVdztr7ZsKNOmt6TUMTQgfpNoVRyfPE5S9BC0A4suXzsGSrAOWcoQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta property="og:title" content="Cuisine Compass | Taste the World | Food Blog" />
+    <meta property="og:description" content="Cuisine Compass | Taste the World | Food Blog" />
+    <meta property="og:image" content="" />
+    @include('inc.common_head_tags')
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const slider = tns({
@@ -34,7 +25,7 @@
 
 <body>
     @include('inc.header')
-    <div class="max-w-6xl mt-10 mx-auto">
+    <section class="max-w-6xl mt-10 mx-auto">
         <div class="relative bg-gradient-to-l from-[rgba(0,0,0,.4)] via-transparent to-[rgba(0,0,0,.4)]">
             <div class="tiny-slider">
                 <div class="relative">
@@ -113,320 +104,42 @@
                         class="fa-light fa-angle-right text-7xl"></i></button>
             </div>
         </div>
-    </div>
+    </section>
     <div class="max-w-6xl mt-10 mx-auto flex flex-wrap">
         <div class="w-2/3 pr-5">
             <main class="bg-white pb-10">
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/750x350?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
+                @foreach ($recipes as $recipe)
+                    <article>
+                        <div class="flex pt-4 pb-8 items-start">
+                            <img class="w-1/3" src="{{ $recipe->image_url }}" alt="">
+                            <div class="pl-6 pr-3 w-2/3">
+                                <a href="/recipes/{{ $recipe->slug }}" class="block pb-1 text-2xl text-amber-600 font-medium transition-all hover:text-amber-500">
+                                    {{ \Illuminate\Support\Str::title($recipe->title) }}</a>
+                                <p class="py-1 text-sm font-medium">{{ date('F d, Y', strtotime($recipe->created_at)) }}</p>
+                                <div class="py-2 text-neutral-500 text-sm uppercase">
+                                    <span class="inline-flex items-center px-1">
+                                        <i class="fa-solid mr-1 fa-hourglass-half"></i>{{ $recipe->cooking_time }}
+                                    </span>
+                                    <span class="px-1">
+                                        <i class="fa-solid fa-sliders mr-1"></i>
+                                        {{ $recipe->difficulty_level }}
+                                    </span>
+                                    <span class="px-1">
+                                        <i class="fa-solid fa-users mr-1"></i>{{ $recipe->serving_size }}
+                                    </span>
+                                    <span class="px-1">
+                                        <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
+                                        @foreach ($recipe->categories as $key=>$category)
+                                            <a href="/category/fish"
+                                                class="inline-flex items-center hover:underline">{{ $category->label }}</a>{{ ($key<(count($recipe->categories)-1))? "," : "" }}
+                                        @endforeach
+                                    </span>
+                                </div>
+                                <p class="text-lg font-extralight py-1">{{ $recipe->description }}</p>
                             </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/800x420?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/800x450?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/500x450?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/600x350?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/600x400?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/800x430?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/900x450?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/800x450?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/600x300?breakfast"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-1 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-1 text-sm font-medium">December 8, 2023</p>
-                            <div class="py-2 text-neutral-500 text-sm uppercase">
-                                <span class="inline-flex items-center px-1">
-                                    <i class="fa-solid mr-1 fa-hourglass-half"></i>10 mins
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-sliders mr-1"></i>
-                                    Easy
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid fa-users mr-1"></i>5
-                                </span>
-                                <span class="px-1">
-                                    <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Fish</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Cake</a>, 
-                                    <a href="/category/fish" class="inline-flex items-center hover:underline">Eggs</a>
-                                </span>
-                            </div>
-                            <p class="text-lg font-extralight py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
+                    </article>
+                @endforeach
             </main>
         </div>
         <div class="w-1/3 pl-5">

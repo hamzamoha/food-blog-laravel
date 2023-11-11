@@ -2,20 +2,11 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Articles</title>
-    @vite('resources/css/ckeditor-tailwind-reset.css')
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="/fontawesome/css/all.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"
-        integrity="sha512-j+F4W//4Pu39at5I8HC8q2l1BNz4OF3ju39HyWeqKQagW6ww3ZF9gFcu8rzUbyTDY7gEo/vqqzGte0UPpo65QQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css"
-        integrity="sha512-eMxdaSf5XW3ZW1wZCrWItO2jZ7A9FhuZfjVdztr7ZsKNOmt6TUMTQgfpNoVRyfPE5S9BC0A4suXzsGSrAOWcoQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta property="og:title" content="Cuisine Compass | Taste the World | Food Blog" />
+    <meta property="og:description" content="Cuisine Compass | Taste the World | Food Blog" />
+    <meta property="og:image" content="" />
+    @include('inc.common_head_tags')
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const slider = tns({
@@ -99,6 +90,32 @@
     <div class="max-w-6xl mt-10 mx-auto flex flex-wrap">
         <div class="w-2/3 pr-5">
             <main class="bg-white pb-10">
+                @foreach ($articles as $article)
+                    <article>
+                        <div class="flex pt-4 pb-8 items-start">
+                            <img class="w-1/3" src="{{ $article->image_url }}"
+                                alt="{{ \Illuminate\Support\Str::title($article->title) }}">
+                            <div class="pl-6 pr-3 w-2/3">
+                                <a href="/articles/{{ $article->slug }}" class="block pb-2 text-2xl text-amber-600 font-medium transition-all hover:text-amber-500">
+                                    {{ \Illuminate\Support\Str::title($article->title) }}</a>
+                                <p class="py-2 text-sm font-medium">
+                                    {{ date('F d, Y', strtotime($article->created_at)) }}</p>
+                                <div class="py-2 text-neutral-500 text-sm uppercase">
+                                    <span class="px-1">
+                                        <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
+                                        @foreach ($article->categories as $key => $category)
+                                            <a href="/category/fish"
+                                                class="inline-flex items-center hover:underline">{{ $category->label }}</a>{{ $key < count($article->categories) - 1 ? ',' : '' }}
+                                        @endforeach
+                                    </span>
+                                </div>
+                                <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things
+                                    to do in life just dont over do it while you are still have the potentionl to do
+                                    so...</p>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
                 <article>
                     <div class="flex pt-4 pb-8">
                         <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/800x450?food"
@@ -106,7 +123,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -118,7 +136,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -130,7 +149,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -142,7 +162,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -154,7 +175,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -166,7 +188,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -178,7 +201,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -190,7 +214,8 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
@@ -202,22 +227,28 @@
                         <div class="pl-6 pr-3 w-2/3">
                             <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
                             <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to do in
+                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
+                                do in
                                 life just dont over do it while you are still have the potentionl to do so...</p>
                         </div>
                     </div>
                 </article>
                 <section class="flex py-3">
                     <ul class="flex mx-auto border rounded-lg overflow-hidden">
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i class="fa-regular fa-angles-left"></i></a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i class="fa-regular fa-angle-left"></i></a></li>
+                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i
+                                    class="fa-regular fa-angles-left"></i></a></li>
+                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i
+                                    class="fa-regular fa-angle-left"></i></a></li>
                         <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">3</a></li>
                         <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">4</a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300 bg-amber-300" href="">5</a></li>
+                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300 bg-amber-300"
+                                href="">5</a></li>
                         <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">6</a></li>
                         <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">7</a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i class="fa-regular fa-angle-right"></i></a></li>
-                        <li><a class="block px-3 py-2 text-sm hover:bg-amber-300" href=""><i class="fa-regular fa-angles-right"></i></a></li>
+                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i
+                                    class="fa-regular fa-angle-right"></i></a></li>
+                        <li><a class="block px-3 py-2 text-sm hover:bg-amber-300" href=""><i
+                                    class="fa-regular fa-angles-right"></i></a></li>
                     </ul>
                 </section>
             </main>
