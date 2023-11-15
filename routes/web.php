@@ -6,8 +6,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\SaverController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
+use App\Models\Article;
 use App\Models\Recipe;
 use Illuminate\Support\Facades\Route;
 
@@ -36,11 +38,12 @@ Route::name("auth.")->controller(UserController::class)->group(function () {
     });
 });
 
-Route::get('/', [MainController::class, 'index']);
-Route::get('/recipes/{slug}', [MainController::class, 'recipe']);
-Route::get('/recipes', [MainController::class, 'recipes']);
-Route::get('/articles', [MainController::class, 'articles']);
-Route::get('/articles/{slug}', [MainController::class, 'article']);
+Route::get('/', [MainController::class, 'index'])->name("home");
+Route::get('/recipes/{slug}', [MainController::class, 'recipe'])->name("recipes.show");
+Route::get('/recipes', [MainController::class, 'recipes'])->name("recipes.index");
+Route::get('/articles', [MainController::class, 'articles'])->name("articles.index");
+Route::get('/articles/{slug}', [MainController::class, 'article'])->name("articles.show");
+Route::post('/save', [SaverController::class, 'save'])->name("save");
 
 Route::get('/admin', [AdminController::class, 'index']);
 
@@ -84,6 +87,23 @@ Route::prefix('api')->group(function () {
 })->name('api.');
 
 Route::get('/test', function () {
+    exit(0);
+    for ($i = 1; $i <= 6; $i++) {
+        $article = new Article();
+        $article->title = \Illuminate\Support\Str::title(fake()->sentence());
+        $article->slug = \Illuminate\Support\Str::slug($article->title);
+        if (Article::where('slug', $article->slug)->exists()) {
+            $count = 1;
+            while (Article::where('slug', "$article->slug-$count")->exists()) {
+                $count += 1;
+            }
+            $article->slug = $article->slug - $count;
+        }
+        $article->image_url = "/uploads/article-$article->slug.jpg";
+        $article->tags = implode(",", fake()->words());
+        $article->content = "";
+        $article->save();
+    }
     exit(0);
     $recipes = Recipe::paginate(5);
     foreach ($recipes as $recipe) {

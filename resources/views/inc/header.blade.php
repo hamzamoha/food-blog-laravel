@@ -33,7 +33,8 @@
             <ul class="flex items-center pl-3 justify-center">
                 @auth
                     <li class="border-r">
-                        <a href="{{ route('auth.profile') }}" class="py-2 px-3 transition-all hover:text-neutral-500">Profile</a>
+                        <a href="{{ route('auth.profile') }}"
+                            class="py-2 px-3 transition-all hover:text-neutral-500">{{ auth()->user()->firstname }}</a>
                     </li>
                     <li>
                         <form action="{{ route('auth.logout') }}" method="POST">
@@ -46,10 +47,12 @@
                 @endauth
                 @guest
                     <li class="border-r">
-                        <a href="{{ route('auth.login') }}" class="py-2 px-3 transition-all hover:text-neutral-500">Login</a>
+                        <a href="{{ route('auth.login') }}"
+                            class="py-2 px-3 transition-all hover:text-neutral-500">Login</a>
                     </li>
                     <li>
-                        <a href="{{ route('auth.register') }}" class="py-2 px-3 transition-all hover:text-neutral-500">Register</a>
+                        <a href="{{ route('auth.register') }}"
+                            class="py-2 px-3 transition-all hover:text-neutral-500">Register</a>
                     </li>
                 @endguest
             </ul>
@@ -57,21 +60,41 @@
     </div>
     <nav class="flex items-center">
         <ul class="flex items-center">
-            <li class="mr-3"><a href="/"
-                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Home</a>
+            <li class="mr-3">
+                <a href="/"
+                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
+                    Home
+                </a>
             </li>
-            <li class="mr-3"><a href="/"
-                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Categories</a>
+            <li class="mr-3">
+                <a href="/"
+                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
+                    Categories
+                </a>
             </li>
-            <li class="mr-3"><a href="/"
-                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Recipes</a>
+            <li class="mr-3">
+                <a href="{{ route('recipes.index') }}"
+                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
+                    Recipes
+                </a>
             </li>
-            <li><a href="/"
-                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">About
-                    Us</a>
+            <li class="mr-3">
+                <a href="{{ route('articles.index') }}"
+                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
+                    Articles
+                </a>
             </li>
-            <li><a href="/"
-                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">Contact</a>
+            <li class="mr-3">
+                <a href="/"
+                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
+                    About Us
+                </a>
+            </li>
+            <li>
+                <a href="/"
+                    class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
+                    Contact
+                </a>
             </li>
         </ul>
         <ul class="flex items-center ml-auto">

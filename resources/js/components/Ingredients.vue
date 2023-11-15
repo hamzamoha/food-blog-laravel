@@ -28,7 +28,8 @@
                     </span>
                 </label>
                 <datalist id="categoryOptions">
-                    <option v-for="(item, index) in Object.keys(ingredients)" :key="index" :value="titleCase(item)"></option>
+                    <option v-for="(item, index) in Object.keys(ingredients)" :key="index" :value="titleCase(item)">
+                    </option>
                 </datalist>
                 <div class="flex items-center justify-center w-full">
                     <label for="image" @drop="drop($event)" @dragover="$event.preventDefault()"
@@ -67,9 +68,9 @@
                     </h3>
                     <div class="flex flex-wrap justify-center p-2 border bg-neutral-100">
                         <div class="m-0.5 py-1 px-2 text-center rounded transition-all hover:bg-amber-200 cursor-pointer"
-                            v-for="item in ingredients[category]" :key="item.id">
-                            <img class="w-12 h-12 rounded-full block mx-auto my-1 border" :src="item.image_url+'?small'"
-                                :alt="item.name">
+                            v-for="item in ingredients[category]" :key="item.id" @click="edit(item)">
+                            <img class="w-12 h-12 rounded-full block mx-auto my-1 border object-cover"
+                                :src="item.image_url + '?small'" :alt="item.name">
                             <span class="text-sm font-medium py-1 inline-block">{{ titleCase(item.name) }}</span>
                         </div>
                     </div>
@@ -95,17 +96,29 @@
                             </label>
                             <label for="category"
                                 class="relative block bg-white mb-2 overflow-hidden rounded-md border border-gray-200 px-3 pt-3 shadow-sm focus-within:border-blue-600">
-                                <input type="text" name="category" id="category" placeholder="Category"
-                                    :value="ingredient_edit.category"
+                                <input list="categoryOptions1" type="text" name="category" id="category"
+                                    placeholder="Category" :value="ingredient_edit.category"
                                     class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent outline-none sm:text-sm" />
                                 <span
                                     class="absolute start-3 top-3 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-3 peer-focus:text-xs">
                                     Category
                                 </span>
                             </label>
+                            <datalist id="categoryOptions1">
+                                <option v-for="(item, index) in Object.keys(ingredients)" :key="index"
+                                    :value="titleCase(item)"></option>
+                            </datalist>
+                            <div>
+                                <p class="py-2">
+                                    Recipes: {{ ingredient_edit.recipes_count }}
+                                </p>
+                            </div>
                         </div>
                         <div class="pb-2">
-                            <img :src="ingredient_edit.image_url" alt="Image">
+                            <div class="h-0 pt-[100%] relative">
+                                <img :src="ingredient_edit.image_url"
+                                    class="absolute inset-0 w-full h-full object-cover border p-1" alt="Image">
+                            </div>
                         </div>
                     </div>
                     <div class="flex items-center justify-center w-full">
@@ -131,10 +144,16 @@
                         </label>
                     </div>
                     <div class="py-2 text-center">
-                        <button
+                        <button type="submit"
                             class="py-2 px-4 rounded mr-2 bg-teal-700 hover:bg-teal-600 active:bg-teal-700 text-white">Save</button>
                         <button class="py-2 px-4 rounded bg-slate-700 hover:bg-slate-600 active:bg-slate-700 text-white"
-                            @click="ingredient_edit = null; imagePreview[1] = null">Cancel</button>
+                            @click="ingredient_edit = null; imagePreview[1] = null" type="button">Cancel</button>
+                        <form class="inline-block ml-2" @submit="deleteIngredient($event)" v-if="ingredient_edit.recipes_count === 0"
+                            :action="'/api/ingredients/' + ingredient_edit.id" method="POST">
+                            <input type="hidden" name="_method" value="delete">
+                            <input type="hidden" name="_token" :value="csrf_token">
+                            <button type="submit" class="inline-block py-2 px-4 bg-red-400 rounded hover:bg-red-300 text-white">Delete</button>
+                        </form>
                     </div>
                 </form>
             </div>

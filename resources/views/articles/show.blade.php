@@ -1,4 +1,4 @@
-a<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -30,6 +30,12 @@ a<!DOCTYPE html>
                 <p class="text-center py-2 text-neutral-500 font-light">Published on
                     {{ date('F d, Y', strtotime($article->created_at)) }} &nbsp;&bull;&nbsp;
                     Updated on {{ date('F d, Y', strtotime($article->created_at)) }}</p>
+                <p class="font-light text-center">
+                    <span class="whitespace-nowrap">
+                        Views:&nbsp;&nbsp;{{ \App\Http\Controllers\ViewerController::viewAndGet($article->id, 'articles') }}&nbsp;</i><i
+                            class="fa-regular fa-eye"></i>
+                    </span>
+                </p>
                 <div class="ck-content text-lg font-light py-5">
                     <h2>Introduction</h2>
                     <p>Diet trends come and go, promising quick fixes and miraculous results, but few can boast the
@@ -126,8 +132,8 @@ a<!DOCTYPE html>
                         </div>
                         <div class="m-1">
                             <a class="twitter-share-button" data-size="large"
-                            href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::title($article->title) }}&via=Allrecipes&url={{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}">
-                            Tweet</a>
+                                href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::title($article->title) }}&via=Allrecipes&url={{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}">
+                                Tweet</a>
                         </div>
                         {{--
                         <div class="m-1">

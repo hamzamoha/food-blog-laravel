@@ -96,7 +96,8 @@
                             <img class="w-1/3" src="{{ $article->image_url }}"
                                 alt="{{ \Illuminate\Support\Str::title($article->title) }}">
                             <div class="pl-6 pr-3 w-2/3">
-                                <a href="/articles/{{ $article->slug }}" class="block pb-2 text-2xl text-amber-600 font-medium transition-all hover:text-amber-500">
+                                <a href="/articles/{{ $article->slug }}"
+                                    class="block pb-2 text-2xl text-amber-600 font-medium transition-all hover:text-amber-500">
                                     {{ \Illuminate\Support\Str::title($article->title) }}</a>
                                 <p class="py-2 text-sm font-medium">
                                     {{ date('F d, Y', strtotime($article->created_at)) }}</p>
@@ -116,141 +117,85 @@
                         </div>
                     </article>
                 @endforeach
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/800x450?food"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/400x450?healthy"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/400x400?snack"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/600x400?eat"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/500x350?vegetables"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/400x400?recipe"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/500x300?vegetables"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/500x300?strawberry"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div class="flex pt-4 pb-8">
-                        <img class="w-1/3" src="https://source.unsplash.com/collection/9978864/500x300?eggs"
-                            alt="">
-                        <div class="pl-6 pr-3 w-2/3">
-                            <h3 class="pb-2 text-2xl text-amber-600 font-medium">Free things to do in there 3</h3>
-                            <p class="py-2 text-sm font-medium">December 8, 2023</p>
-                            <p class="text-lg font-light py-1">hello everyone this is one of the most amazing things to
-                                do in
-                                life just dont over do it while you are still have the potentionl to do so...</p>
-                        </div>
-                    </div>
-                </article>
-                <section class="flex py-3">
-                    <ul class="flex mx-auto border rounded-lg overflow-hidden">
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i
-                                    class="fa-regular fa-angles-left"></i></a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i
-                                    class="fa-regular fa-angle-left"></i></a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">3</a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">4</a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300 bg-amber-300"
-                                href="">5</a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">6</a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href="">7</a></li>
-                        <li><a class="block px-3 py-2 text-sm border-r hover:bg-amber-300" href=""><i
-                                    class="fa-regular fa-angle-right"></i></a></li>
-                        <li><a class="block px-3 py-2 text-sm hover:bg-amber-300" href=""><i
-                                    class="fa-regular fa-angles-right"></i></a></li>
-                    </ul>
-                </section>
+                @if ($articles->hasPages())
+                    <section class="flex py-3">
+                        <ul class="flex mx-auto border rounded-lg overflow-hidden">
+                            @php
+                                $last_page = $articles->lastPage();
+                                $current_page = $articles->currentPage();
+                                $start = max(1, $current_page - 2);
+                                $end = min($last_page, $start + 4);
+                                $start = max(1, $end - 4);
+                            @endphp
+                            @if ($articles->onFirstPage())
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angles-left"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angle-left"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{ $articles->url(1) }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angles-left"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ $articles->previousPageUrl() }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angle-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+                            @for ($i = $start; $i <= $end; $i++)
+                                @if ($i == $current_page)
+                                    <li>
+                                        <span class="block px-3 py-2 text-sm border-r bg-amber-300 cursor-default">
+                                            {{ $i }}
+                                        </span>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a class="block px-3 py-2 text-sm border-r hover:bg-amber-300"
+                                            href="{{ $articles->url($i) }}">
+                                            {{ $i }}
+                                        </a>
+                                    </li>
+                                @endif
+                            @endfor
+                            @if ($current_page == $last_page)
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angle-right"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angles-right"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{ $articles->nextPageUrl() }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ $articles->url($last_page) }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angles-right"></i>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </section>
+                @endif
             </main>
         </div>
         <div class="w-1/3 pl-5">

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\File;
+use Intervention\Image\Facades\Image;
 
 class IngredientController extends Controller
 {
@@ -39,9 +41,28 @@ class IngredientController extends Controller
         $ingredient = Ingredient::create([
             "name" => Str::title($request->input("name")),
             "image_url" => "",
-            "category" => Str::lower($request->input("category")),
+            "category" => strtolower(Str::squish($request->input("category"))),
         ]);
-        $ingredient->image_url = "/" . $image->storeAs("uploads", "ingredient-" . Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension());
+        $ingredient->image_url = '/uploads/ingredient-' .  Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension();
+        $new_image = Image::make($image->getRealPath());
+        if ($new_image->width() > $new_image->height()) {
+            $new_image->resize(null, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $new_image->save(storage_path('app' . $ingredient->image_url));
+            $new_image->resize(null, 200, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        } else {
+            $new_image->resize(400, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $new_image->save(storage_path('app' . $ingredient->image_url));
+            $new_image->resize(200, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
+        $new_image->save(storage_path('app/uploads/small/ingredient-' .  Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension()));
         $ingredient->save();
         return redirect("/admin")->withFragment("#/ingredients/");
     }
@@ -69,11 +90,30 @@ class IngredientController extends Controller
     {
         $ingredient = Ingredient::find($id);
         $ingredient->name = Str::title($request->input("name"));
-        $ingredient->category = Str::squish($request->input("category"));
+        $ingredient->category = strtolower(Str::squish($request->input("category")));
         if ($request->hasFile("image")) {
             $request->validate(["image" => [File::image()]]);
             $image = $request->file('image');
-            $ingredient->image_url = "/" . $image->storeAs("uploads", "ingredient-" . Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension());
+            $new_image = Image::make($image->getRealPath());
+            $ingredient->image_url = "/uploads/ingredient-" . Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension();
+            if ($new_image->width() > $new_image->height()) {
+                $new_image->resize(null, 400, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $new_image->save(storage_path('app' . $ingredient->image_url));
+                $new_image->resize(null, 200, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            } else {
+                $new_image->resize(400, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $new_image->save(storage_path('app' . $ingredient->image_url));
+                $new_image->resize(200, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            }
+            $new_image->save(storage_path('app/uploads/small/ingredient-' .  Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension()));
         }
         $ingredient->save();
         return redirect("/admin")->withFragment("#/ingredients");
@@ -82,8 +122,14 @@ class IngredientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ingredient $ingredient)
+    public function destroy($id)
     {
-        //
+        $ingredient = Ingredient::withCount("recipes")->find($id);
+        if ($ingredient->recipes_count === 0) {
+            Storage::delete($ingredient->image_url);
+            Storage::delete(str_replace("/uploads/", "/uploads/small/", $ingredient->image_url));
+            $ingredient->delete();
+        }
+        return redirect("/admin")->withFragment("#/ingredients");
     }
 }

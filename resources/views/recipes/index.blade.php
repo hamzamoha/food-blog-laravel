@@ -113,9 +113,11 @@
                         <div class="flex pt-4 pb-8 items-start">
                             <img class="w-1/3" src="{{ $recipe->image_url }}" alt="">
                             <div class="pl-6 pr-3 w-2/3">
-                                <a href="/recipes/{{ $recipe->slug }}" class="block pb-1 text-2xl text-amber-600 font-medium transition-all hover:text-amber-500">
+                                <a href="/recipes/{{ $recipe->slug }}"
+                                    class="block pb-1 text-2xl text-amber-600 font-medium transition-all hover:text-amber-500">
                                     {{ \Illuminate\Support\Str::title($recipe->title) }}</a>
-                                <p class="py-1 text-sm font-medium">{{ date('F d, Y', strtotime($recipe->created_at)) }}</p>
+                                <p class="py-1 text-sm font-medium">{{ date('F d, Y', strtotime($recipe->created_at)) }}
+                                </p>
                                 <div class="py-2 text-neutral-500 text-sm uppercase">
                                     <span class="inline-flex items-center px-1">
                                         <i class="fa-solid mr-1 fa-hourglass-half"></i>{{ $recipe->cooking_time }}
@@ -129,9 +131,9 @@
                                     </span>
                                     <span class="px-1">
                                         <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
-                                        @foreach ($recipe->categories as $key=>$category)
+                                        @foreach ($recipe->categories as $key => $category)
                                             <a href="/category/fish"
-                                                class="inline-flex items-center hover:underline">{{ $category->label }}</a>{{ ($key<(count($recipe->categories)-1))? "," : "" }}
+                                                class="inline-flex items-center hover:underline">{{ $category->label }}</a>{{ $key < count($recipe->categories) - 1 ? ',' : '' }}
                                         @endforeach
                                     </span>
                                 </div>
@@ -140,6 +142,85 @@
                         </div>
                     </article>
                 @endforeach
+                @if ($recipes->hasPages())
+                    <section class="flex py-3">
+                        <ul class="flex mx-auto border rounded-lg overflow-hidden">
+                            @php
+                                $last_page = $recipes->lastPage();
+                                $current_page = $recipes->currentPage();
+                                $start = max(1, $current_page - 2);
+                                $end = min($last_page, $start + 4);
+                                $start = max(1, $end - 4);
+                            @endphp
+                            @if ($recipes->onFirstPage())
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angles-left"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angle-left"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{ $recipes->url(1) }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angles-left"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ $recipes->previousPageUrl() }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angle-left"></i>
+                                    </a>
+                                </li>
+                            @endif
+                            @for ($i = $start; $i <= $end; $i++)
+                                @if ($i == $current_page)
+                                    <li>
+                                        <span class="block px-3 py-2 text-sm border-r bg-amber-300 cursor-default">
+                                            {{ $i }}
+                                        </span>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a class="block px-3 py-2 text-sm border-r hover:bg-amber-300"
+                                            href="{{ $recipes->url($i) }}">
+                                            {{ $i }}
+                                        </a>
+                                    </li>
+                                @endif
+                            @endfor
+                            @if ($current_page == $last_page)
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angle-right"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="block px-3 py-2 text-sm border-r text-neutral-400 cursor-default">
+                                        <i class="fa-regular fa-angles-right"></i>
+                                    </span>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{ $recipes->nextPageUrl() }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angle-right"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ $recipes->url($last_page) }}"
+                                        class="block px-3 py-2 text-sm border-r hover:bg-amber-300">
+                                        <i class="fa-regular fa-angles-right"></i>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </section>
+                @endif
             </main>
         </div>
         <div class="w-1/3 pl-5">
