@@ -84,6 +84,9 @@ Route::prefix('api')->group(function () {
     Route::prefix("ckeditor")->group(function () {
         Route::post('/upload', [StorageController::class, 'ckeditor_upload']);
     });
+    Route::prefix("users")->controller(UserController::class)->group(function () {
+        Route::get('/', 'index')->name("index");
+    })->name("users.");
 })->name('api.');
 
 Route::get('/test', function () {

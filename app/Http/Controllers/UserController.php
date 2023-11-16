@@ -41,11 +41,14 @@ class UserController extends Controller
     }
     public function profile()
     {
-        //
+        return view("auth.profile");
     }
     public function logout(Request $request)
     {
         auth()->logout();
         return redirect()->route('home');
+    }
+    public function index() {
+        return response()->json(User::all());
     }
 }
