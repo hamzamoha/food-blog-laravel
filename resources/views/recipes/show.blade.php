@@ -106,6 +106,29 @@
             font-size: 2.2em !important;
         }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", (event) => {
+            document.querySelectorAll('.rating-container input[type="radio"][name="rating"]').forEach(radio => {
+                radio.addEventListener("change", (event) => {
+                    input = document.querySelector('.rating-container input[type="radio"]:checked')
+                    if (input) {
+                        fetch('/api/rating', {
+                            headers: {
+                                "Accept": "application/json",
+                                "Content-Type": "application/json",
+                                "X-CSRF-Token": '{{ csrf_token() }}'
+                            },
+                            method: "POST",
+                            body: JSON.stringify({
+                                rating: input.value,
+                                recipe_id: {{ $recipe->id }},
+                            })
+                        })
+                    }
+                })
+            });
+        })
+    </script>
 </head>
 
 <body>
@@ -131,14 +154,14 @@
                     Updated on {{ date('F d, Y', strtotime($recipe->updated_at)) }}</p>
                 <p class="font-light text-center">
                     <span class="whitespace-nowrap">
-                        Views:&nbsp;&nbsp;{{ \App\Http\Controllers\ViewerController::viewAndGet($recipe->id, "recipes") }}&nbsp;</i><i class="fa-regular fa-eye"></i>
+                        Views:&nbsp;&nbsp;{{ \App\Http\Controllers\ViewerController::viewAndGet($recipe->id, 'recipes') }}&nbsp;</i><i
+                            class="fa-regular fa-eye"></i>
                     </span>
-                    <span class="whitespace-nowrap inline-block"><span
-                        class="text-2xl">&nbsp;&bull;&nbsp;</span></span>
+                    <span class="whitespace-nowrap inline-block"><span class="text-2xl">&nbsp;&bull;&nbsp;</span></span>
                     <span class="whitespace-nowrap">
-                        Rating:&nbsp;&nbsp;<i class="fa-solid fa-star"></i><i
-                        class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                        class="fa-solid fa-star-half-stroke"></i><i class="fa-regular fa-star"></i>
+                        Rating:&nbsp;{{ \App\Http\Controllers\SaverController::get_rating($recipe->id) }}&nbsp;<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                            class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i><i
+                            class="fa-regular fa-star"></i>
                     </span>
                 </p>
                 <div class="py-1 text-center">
@@ -296,7 +319,8 @@
                     {{ \Illuminate\Support\Str::title(str_replace(',', ', ', $recipe->tags)) }}
                 </div>
                 <section class="py-6">
-                    <h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!</h4>
+                    <h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!
+                    </h4>
                     <div class="flex flex-wrap py-2 items-center">
                         <div class="m-1">
                             <div class="fb-share-button"
@@ -342,23 +366,23 @@
                     <div class="flex items-center flex-wrap bg-white p-3">
                         <span class="pr-7 text-2xl">Rate this recipe</span>
                         <fieldset class="rating-container">
-                            <input type="radio" name="rating" id="rate5">
+                            <input type="radio" name="rating" id="rate5" value="5">
                             <label for="rate5">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate4">
+                            <input type="radio" name="rating" id="rate4" value="4">
                             <label for="rate4">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate3">
+                            <input type="radio" name="rating" id="rate3" value="3">
                             <label for="rate3">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate2">
+                            <input type="radio" name="rating" id="rate2" value="2">
                             <label for="rate2">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate1">
+                            <input type="radio" name="rating" id="rate1" value="1">
                             <label for="rate1">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
@@ -366,24 +390,60 @@
                         </fieldset>
                     </div>
                 </section>
+                <section class="py-2">
+                    @if ($recipe->comments && is_countable($recipe->comments) && $recipe->comments->count() > 0)
+                        <h2 class="text-2xl py-2">Comments</h2>
+                        @foreach ($recipe->comments as $comment)
+                            <div class="flex my-2">
+                                <div class="w-16">
+                                    @if ($comment->user->photo_url && Illuminate\Support\Facades\Storage::exists($comment->user->photo_url))
+                                        <img src="{{ $comment->user->photo_url }}" alt=""
+                                            class="w-16 h-16 p-2 rounded-full">
+                                    @else
+                                        <img src="/uploads/user.png" alt=""
+                                            class="w-16 h-16 p-2 rounded-full">
+                                    @endif
+                                </div>
+                                <div class="p-3 rounded border shadow flex-grow">
+                                    <h4 class="font-semibold">
+                                        {{ \Illuminate\Support\Str::title($comment->user->firstname . ' ' . $comment->user->lastname) }}
+                                    </h4>
+                                    <p class="text-sm">{{ $comment->updated_at->diffForHumans() }}</p>
+                                    <p class="py-3 pl-2">
+                                        {{ $comment->body }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <h2 class="text-2xl py-2">No Comments Yet </h2>
+                    @endif
+                </section>
                 <section class="my-5">
                     <h4 class="py-2 text-2xl">Leave a Comment</h4>
-                    <div>
-                        <textarea required name="comment" id="comment"
-                            class="w-full block my-2 bg-neutral-100 p-2 text-sm font-medium border outline-none"
-                            placeholder="Type your comment here..." rows="6"></textarea>
-                        <input type="text" required
-                            class="block w-full my-2 p-2 bg-neutral-100 border outline-none text-sm"
-                            placeholder="Enter your name" name="name">
-                        <input type="text" required
-                            class="block w-full my-2 p-2 bg-neutral-100 border outline-none text-sm"
-                            placeholder="Your Email here" name="name">
-                    </div>
-                    <div class="flex py-2">
-                        <input type="button"
-                            class="py-2.5 px-5 rounded bg-teal-500 ml-auto hover:bg-teal-600 active:bg-teal-500 text-sm font-bold text-white cursor-pointer"
-                            value="Submit">
-                    </div>
+                    @auth
+                        <form method="POST" autocomplete="off"
+                            action="{{ route('comments.store', ['type' => 'recipe', 'id' => $recipe->id]) }}">
+                            @csrf
+                            <div>
+                                <span class="bg-neutral-200 rounded-t inline-block py-1 px-2">as: <span
+                                        class="font-bold">{{ \Illuminate\Support\Str::title(auth()->user()->firstname . ' ' . auth()->user()->lastname) }}</span></span>
+                            </div>
+                            <textarea required name="body" id="body"
+                                class="w-full block mb-2 bg-neutral-100 p-2 text-sm font-medium border outline-none"
+                                placeholder="Type your comment here..." rows="6"></textarea>
+                            <div class="flex py-2">
+                                <input type="submit"
+                                    class="py-2.5 px-5 rounded bg-teal-500 ml-auto hover:bg-teal-600 active:bg-teal-500 text-sm font-bold text-white cursor-pointer"
+                                    value="Submit">
+                            </div>
+                        </form>
+                    @endauth
+                    @guest
+                        <div class="text-lg py-2 text-center">
+                            Login to comment
+                        </div>
+                    @endguest
                 </section>
                 <section class="py-2">
                     <div class="flex justify-center items-center">

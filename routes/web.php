@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\RecipeController;
@@ -35,6 +36,12 @@ Route::name("auth.")->controller(UserController::class)->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post("/logout", 'logout')->name("logout");
         Route::get("/profile", 'profile')->name("profile");
+        Route::post("/profile", 'update');
+    });
+});
+Route::name("comments.")->controller(CommentController::class)->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::post("/comment/{type}/{id}", 'store')->name("store");
     });
 });
 
@@ -43,7 +50,6 @@ Route::get('/recipes/{slug}', [MainController::class, 'recipe'])->name("recipes.
 Route::get('/recipes', [MainController::class, 'recipes'])->name("recipes.index");
 Route::get('/articles', [MainController::class, 'articles'])->name("articles.index");
 Route::get('/articles/{slug}', [MainController::class, 'article'])->name("articles.show");
-Route::post('/save', [SaverController::class, 'save'])->name("save");
 
 Route::get('/admin', [AdminController::class, 'index']);
 
@@ -87,6 +93,14 @@ Route::prefix('api')->group(function () {
     Route::prefix("users")->controller(UserController::class)->group(function () {
         Route::get('/', 'index')->name("index");
     })->name("users.");
+    Route::prefix("save")->controller(SaverController::class)->group(function () {
+        Route::post('/', 'save')->name("save");
+    });
+    Route::prefix("rating")->controller(SaverController::class)->group(function () {
+        Route::middleware("auth")->group(function () {
+            Route::post('/', 'rating')->name("rating");
+        });
+    });
 })->name('api.');
 
 Route::get('/test', function () {

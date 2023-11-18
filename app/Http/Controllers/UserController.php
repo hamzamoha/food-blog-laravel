@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\File;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -35,7 +41,13 @@ class UserController extends Controller
             "email" => ["required", "email", "max:255", "unique:users"],
             "password" => ["required", "confirmed", Password::min(6)],
         ]);
-        $user = User::create(request(["firstname", "lastname", "username", "email", "password"]));
+        $user = User::create([
+            "firstname" => Str::title($request->input("firstname")),
+            "lastname" => Str::title($request->input("lastname")),
+            "username" => strtolower($request->input("username")),
+            "email" => strtolower($request->input("email")),
+            "password" => $request->input("password")
+        ]);
         auth()->login($user, $request->input("remember"));
         return redirect()->route('home');
     }
@@ -48,7 +60,73 @@ class UserController extends Controller
         auth()->logout();
         return redirect()->route('home');
     }
-    public function index() {
+    public function index()
+    {
         return response()->json(User::all());
+    }
+    private function compress($source_image)
+    {
+        $compress_image = $source_image;
+        $image_info = getimagesize($source_image);
+        if ($image_info['mime'] == 'image/jpeg') {
+            $source_image = imagecreatefromjpeg($source_image);
+            imagejpeg($source_image, $compress_image, 20);             //for jpeg or gif, it should be 0-100
+        } elseif ($image_info['mime'] == 'image/png') {
+            $source_image = imagecreatefrompng($source_image);
+            imagepng($source_image, $compress_image, 3);
+        }
+        return $compress_image;
+    }
+    public function update(Request $request)
+    {
+        $user = auth()->user();
+        if ($request->hasFile("image")) {
+            $request->validate(["image" => [File::image()]]);
+            if ($user->photo_url && Storage::exists($user->photo_url)) {
+                Storage::delete($user->photo_url);
+            }
+            $new_image = Image::make($this->compress($request->file('image')->getRealPath()));
+            $temp = min($new_image->width(), $new_image->height());
+            $new_image = $new_image->crop($temp,$temp);
+            $temp = "/uploads/user-" . $user->username . "-" . $user->id . "." . $request->file('image')->getClientOriginalExtension();
+            $new_image->save(storage_path('app' . $temp));
+            $user->photo_url = $temp;
+            $user->save();
+            return response()->redirectToRoute("auth.profile");
+        }
+        if ($request->has("email")) {
+            $request->validate([
+                "firstname" => ["required", "max:255"],
+                "lastname" => ["required", "max:255"],
+                "username" => ["required", "max:255"],
+                "email" => ["required", "email", "max:255"],
+            ]);
+            if ($request->username != $user->username)
+                $request->validate([
+                    "username" => ["unique:users"]
+                ]);
+            $user->username = strtolower($request->input("username"));
+            if ($request->email != $user->email)
+                $request->validate([
+                    "email" => ["unique:users"]
+                ]);
+            $user->email = strtolower($request->input("email"));
+            $user->firstname = Str::title($request->input("firstname"));
+            $user->lastname = Str::title($request->input("lastname"));
+            $user->save();
+            return response()->redirectToRoute("auth.profile");
+        }
+        if ($request->has("old_password")) {
+            $request->validate([
+                "old_password" => ["required"],
+                "new_password" => ["required", "confirmed", Password::min(6)],
+            ]);
+            if (!Hash::check($request->old_password, $user->password)) {
+                return back()->with("error", "Old Password Doesn't match!");
+            }
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            return response()->redirectToRoute("auth.profile");
+        }
     }
 }

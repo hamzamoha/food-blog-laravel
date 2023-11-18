@@ -160,24 +160,59 @@
                         </div>
                     </div>
                 </section>
+                <section class="py-2">
+                    @if ($article->comments && is_countable($article->comments) && $article->comments->count() > 0)
+                        <h2 class="text-2xl py-2">Comments</h2>
+                        @foreach ($article->comments as $comment)
+                            <div class="flex my-2">
+                                <div class="w-16">
+                                    @if ($comment->user->photo_url && Illuminate\Support\Facades\Storage::exists($comment->user->photo_url))
+                                        <img src="{{ $comment->user->photo_url }}" alt=""
+                                            class="w-16 h-16 p-2 rounded-full">
+                                    @else
+                                        <img src="/uploads/user.png" alt="" class="w-16 h-16 p-2 rounded-full">
+                                    @endif
+                                </div>
+                                <div class="p-3 rounded border shadow flex-grow">
+                                    <h4 class="font-semibold">
+                                        {{ \Illuminate\Support\Str::title($comment->user->firstname . ' ' . $comment->user->lastname) }}
+                                    </h4>
+                                    <p class="text-sm">{{ $comment->updated_at->diffForHumans() }}</p>
+                                    <p class="py-3 pl-2">
+                                        {{ $comment->body }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <h2 class="text-2xl py-2">No Comments Yet </h2>
+                    @endif
+                </section>
                 <section class="my-5">
                     <h4 class="py-2 text-2xl">Leave a Comment</h4>
-                    <div>
-                        <textarea required name="comment" id="comment"
-                            class="w-full block my-2 bg-neutral-100 p-2 text-sm font-medium border outline-none"
-                            placeholder="Type your comment here..." rows="6"></textarea>
-                        <input type="text" required
-                            class="block w-full my-2 p-2 bg-neutral-100 border outline-none text-sm"
-                            placeholder="Enter your name" name="name">
-                        <input type="text" required
-                            class="block w-full my-2 p-2 bg-neutral-100 border outline-none text-sm"
-                            placeholder="Your Email here" name="name">
-                    </div>
-                    <div class="flex py-2">
-                        <input type="button"
-                            class="py-2.5 px-5 rounded bg-teal-500 ml-auto hover:bg-teal-600 active:bg-teal-500 text-sm font-bold text-white cursor-pointer"
-                            value="Submit">
-                    </div>
+                    @auth
+                        <form method="POST" autocomplete="off"
+                            action="{{ route('comments.store', ['type' => 'article', 'id' => $article->id]) }}">
+                            @csrf
+                            <div>
+                                <span class="bg-neutral-200 rounded-t inline-block py-1 px-2">as: <span
+                                        class="font-bold">{{ \Illuminate\Support\Str::title(auth()->user()->firstname . ' ' . auth()->user()->lastname) }}</span></span>
+                            </div>
+                            <textarea required name="body" id="body"
+                                class="w-full block mb-2 bg-neutral-100 p-2 text-sm font-medium border outline-none"
+                                placeholder="Type your comment here..." rows="6"></textarea>
+                            <div class="flex py-2">
+                                <input type="submit"
+                                    class="py-2.5 px-5 rounded bg-teal-500 ml-auto hover:bg-teal-600 active:bg-teal-500 text-sm font-bold text-white cursor-pointer"
+                                    value="Submit">
+                            </div>
+                        </form>
+                    @endauth
+                    @guest
+                        <div class="text-lg py-2 text-center">
+                            Login to comment
+                        </div>
+                    @endguest
                 </section>
                 <section class="py-2">
                     <div class="flex justify-center items-center">

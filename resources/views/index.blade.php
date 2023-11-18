@@ -9,7 +9,7 @@
     @include('inc.common_head_tags')
     <script>
         async function save_request(table, id) {
-            const response = await fetch("/save", {
+            const response = await fetch("/api/save", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -65,14 +65,16 @@
                     <time datetime="2023-10-12 21:00">{{ $featured_recipe->created_at->diffForHumans() }}</time>
                     <div class="ml-auto">
                         <a href="/" class="p-1 mr-1"><i class="fa-solid fa-share-nodes fa-lg"></i></a>
-                        <button class="w-5" type="button"
-                            onclick="save(event, 'recipes', '{{ $featured_recipe->id }}')">
-                            @if (\App\Http\Controllers\SaverController::is_saved('recipes', $featured_recipe->id))
-                                <i class="fa-solid fa-bookmark fa-lg"></i>
-                            @else
-                                <i class="fa-regular fa-bookmark fa-lg"></i>
-                            @endif
-                        </button>
+                        @auth
+                            <button class="w-5" type="button"
+                                onclick="save(event, 'recipes', '{{ $featured_recipe->id }}')">
+                                @if (\App\Http\Controllers\SaverController::is_saved('recipes', $featured_recipe->id))
+                                    <i class="fa-solid fa-bookmark fa-lg"></i>
+                                @else
+                                    <i class="fa-regular fa-bookmark fa-lg"></i>
+                                @endif
+                            </button>
+                        @endauth
                     </div>
                 </div>
                 <div class="text-center py-1">
@@ -184,15 +186,17 @@
                         <p class="text-sm text-neutral-600 py-1">
                             {{ $recipe->description }}
                         </p>
-                        <div>
-                            <button type="button" onclick="save(event, 'recipes', '{{ $recipe->id }}')">
-                                @if (\App\Http\Controllers\SaverController::is_saved('recipes', $recipe->id))
-                                    <span class="w-5 inline-block"><i class="fa-solid fa-bookmark"></i></span> Saved
-                                @else
-                                    <span class="w-5 inline-block"><i class="fa-regular fa-bookmark"></i></span> Save
-                                @endif
-                            </button>
-                        </div>
+                        @auth
+                            <div>
+                                <button type="button" onclick="save(event, 'recipes', '{{ $recipe->id }}')">
+                                    @if (\App\Http\Controllers\SaverController::is_saved('recipes', $recipe->id))
+                                        <span class="w-5 inline-block"><i class="fa-solid fa-bookmark"></i></span> Saved
+                                    @else
+                                        <span class="w-5 inline-block"><i class="fa-regular fa-bookmark"></i></span> Save
+                                    @endif
+                                </button>
+                            </div>
+                        @endauth
                     </div>
                 </article>
             @endforeach

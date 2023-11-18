@@ -90,7 +90,7 @@
                                 <td class="py-5 px-4">
                                     <div class="relative">
                                         <textarea class="h-0 w-0 absolute overflow-hidden opacity-0 invisible"
-                                            v-model="editor.data" name="content"></textarea>
+                                            v-model="content" name="content"></textarea>
                                         <div class="editor"></div>
                                     </div>
                                 </td>
@@ -183,17 +183,6 @@
 }
 </style>
 <script>
-function handleSampleError(error) {
-    const issueUrl = 'https://github.com/ckeditor/ckeditor5/issues';
-
-    const message = [
-        'Oops, something went wrong!',
-        `Please, report the following error on ${issueUrl} with the build id "c4uo8i91sfq2-27hfa2v992vh" and the error stack trace:`
-    ].join('\n');
-
-    console.error(message);
-    console.error(error);
-}
 const watchdog = new window.CKSource.EditorWatchdog();
 window.watchdog = watchdog;
 watchdog.setCreator((element, config) => {
@@ -206,15 +195,12 @@ watchdog.setCreator((element, config) => {
 watchdog.setDestructor(editor => {
     return editor.destroy();
 });
-watchdog.on('error', handleSampleError);
+watchdog.on('error', (error) => {});
 import SimpleUploadAdapterPlugin from "../ckeditor-upload-adapter"
-import Prism from 'prismjs'
-import "../../css/code.css"
 export default {
     name: "AddRecipe",
     data() {
         return {
-            Prism,
             imagePreview: null,
             csrf_token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             recipe_ingredients: [],
@@ -227,9 +213,7 @@ export default {
             cookingMethods: ['Bake', 'Boil', 'Braise', 'Broil', 'Fry', 'Grill', 'Roast', 'Poach', 'Sauté', 'Steam', 'Stir-Fry', 'Simmer'],
             categories: [],
             recipe_tags: [],
-            editor: {
-                data: `<p style="margin-left:0px;"><span class="text-big"><i><strong>Hearty &amp; Flavorful</strong></i></span></p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;">Spaghetti Bolognese, a cherished Italian classic, unites al dente spaghetti with a rich, savory sauce. Whether you're a seasoned chef or a kitchen novice, this recipe guarantees to impress.</p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;"><span class="text-big"><i><strong>The Secret's in the Sauce</strong></i></span></p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;">The magic begins with a browned meat base and a trio of finely chopped vegetables—onions, carrots, and celery. Garlic adds its aromatic allure. Crushed tomatoes and tomato paste infuse the sauce with richness, while dried oregano, basil, and optional red pepper flakes provide Mediterranean charm. A dash of red wine (if you're feeling adventurous) and slow simmering for up to 2 hours yield a velvety, flavor-packed sauce.</p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;"><span class="text-big"><i><strong>Perfect Pairing</strong></i></span></p><p style="margin-left:0px;"><br data-cke-filler="true"></p><p style="margin-left:0px;">Cook spaghetti to al dente perfection, marrying it with the sauce. For the finishing touch, sprinkle with Parmesan cheese and fresh basil. Spaghetti Bolognese epitomizes comfort and flavor. Share the joy by recreating Italy's essence in your kitchen. Buon appetito!</p><p style="margin-left:0px;"><br data-cke-filler="true"></p>`,
-            }
+            content: '',
         }
     },
     methods: {
@@ -300,11 +284,10 @@ export default {
             })
             .then(() => {
                 watchdog.editor.model.document.on('change:data', () => {
-                    this.editor.data = watchdog.editor.getData();
-                    console.log('changed');
+                    this.content = watchdog.editor.getData();
                 });
             })
-            .catch(handleSampleError);
+            .catch((error)=>{});
     },
 }
 </script>
