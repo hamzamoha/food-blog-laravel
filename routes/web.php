@@ -45,11 +45,16 @@ Route::name("comments.")->controller(CommentController::class)->group(function (
     });
 });
 
+Route::name("recipes.")->prefix("recipes")->controller(RecipeController::class)->group(function () {
+    Route::get('/', "index")->name("index");
+    Route::get('/{slug}', "show")->name("show");
+});
+Route::name("articles.")->prefix("articles")->controller(ArticleController::class)->group(function () {
+    Route::get('/', "index")->name("index");
+    Route::get('/{slug}', "show")->name("show");
+});
+
 Route::get('/', [MainController::class, 'index'])->name("home");
-Route::get('/recipes/{slug}', [MainController::class, 'recipe'])->name("recipes.show");
-Route::get('/recipes', [MainController::class, 'recipes'])->name("recipes.index");
-Route::get('/articles', [MainController::class, 'articles'])->name("articles.index");
-Route::get('/articles/{slug}', [MainController::class, 'article'])->name("articles.show");
 
 Route::get('/admin', [AdminController::class, 'index']);
 
@@ -59,7 +64,7 @@ Route::get('/ckeditor/{url}', [StorageController::class, 'ckeditor']);
 Route::prefix('api')->group(function () {
     Route::prefix('recipes')->group(function () {
         Route::controller(RecipeController::class)->group(function () {
-            Route::get('/', 'index')->name("index");
+            Route::get('/', 'index_api')->name("index");
             Route::post('/', 'store');
         });
         Route::prefix("categories")->controller(CategoryController::class)->group(function () {
@@ -77,7 +82,7 @@ Route::prefix('api')->group(function () {
     })->name("ingredients.");
     Route::prefix("articles")->group(function () {
         Route::controller(ArticleController::class)->group(function () {
-            Route::get('/', 'index')->name("index");
+            Route::get('/', 'index_api')->name("index");
             Route::post('/', 'store');
         });
         Route::prefix("categories")->controller(CategoryController::class)->group(function () {

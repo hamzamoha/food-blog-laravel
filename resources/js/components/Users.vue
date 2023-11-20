@@ -6,8 +6,8 @@
         <thead>
             <tr class="text-left bg-gray-100 uppercase border-b">
                 <th class="px-4 py-3">Name</th>
-                <th class="px-4 py-3">Recipes</th>
-                <th class="px-4 py-3">Articles</th>
+                <th class="px-4 py-3">Saved Recipes</th>
+                <th class="px-4 py-3">Saved Articles</th>
                 <th class="px-4 py-3">Date</th>
             </tr>
         </thead>
@@ -28,22 +28,6 @@
                 <td class="px-4 py-3">100</td>
                 <td class="px-4 py-3">6/10/2020</td>
             </tr>
-            <tr class="border-b">
-                <td class="px-4 py-3">
-                    <div class="flex items-center">
-                        <div class="relative w-8 h-8 mr-3 rounded-full">
-                            <img class="object-cover w-full h-full rounded-full" src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&dpr=1&fit=crop&h=200&w=200" />
-                        </div>
-                        <div>
-                            <p class="font-semibold">Mohammed</p>
-                            <p class="text-xs text-gray-600">Web Designer</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-4 py-3">38</td>
-                <td class="px-4 py-3">100</td>
-                <td class="px-4 py-3">6/10/2020</td>
-            </tr>
             <tr class="border-b" v-for="(user, index) in users" :key="index">
                 <td class="px-4 py-3">
                     <div class="flex items-center">
@@ -56,25 +40,9 @@
                         </div>
                     </div>
                 </td>
-                <td class="px-4 py-3">19</td>
-                <td class="px-4 py-3">100</td>
-                <td class="px-4 py-3">{{ (new Date((user.created_at))).toLocaleString() }}</td>
-            </tr>
-            <tr class="border-b">
-                <td class="px-4 py-3">
-                    <div class="flex items-center">
-                        <div class="relative w-8 h-8 mr-3 rounded-full">
-                            <img class="object-cover w-full h-full rounded-full" src="https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&dpr=1&fit=crop&h=200&w=200" />
-                        </div>
-                        <div>
-                            <p class="font-semibold">Sami</p>
-                            <p class="text-xs text-gray-600">Developer</p>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-4 py-3">21</td>
-                <td class="px-4 py-3">100</td>
-                <td class="px-4 py-3">6/10/2020</td>
+                <td class="px-4 py-3">{{ user.recipes_count }}</td>
+                <td class="px-4 py-3">{{ user.articles_count }}</td>
+                <td class="px-4 py-3">{{ `${(new Date((user.created_at))).getDate()}/${(new Date((user.created_at))).getMonth() + 1}/${(new Date((user.created_at))).getFullYear()}` }}</td>
             </tr>
         </tbody>
     </table>

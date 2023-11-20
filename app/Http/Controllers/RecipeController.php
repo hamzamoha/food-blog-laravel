@@ -19,6 +19,12 @@ class RecipeController extends Controller
      */
     public function index()
     {
+        return view('recipes.index', [
+            "recipes" => Recipe::paginate(8)
+        ]);
+    }
+    public function index_api()
+    {
         return response()->json(Recipe::with("categories")->get());
     }
 
@@ -36,12 +42,12 @@ class RecipeController extends Controller
     public function store(Request $request)
     {
         $slug = Str::slug($request->input("title", ""));
-        if(Recipe::where('slug', $slug)->exists()){
+        if (Recipe::where('slug', $slug)->exists()) {
             $count = 1;
             while (Recipe::where('slug', "$slug-$count")->exists()) {
                 $count += 1;
             }
-            $slug = $slug-$count;
+            $slug = $slug - $count;
         }
         $recipe = Recipe::create([
             "title" => Str::title($request->input("title", "")),
@@ -79,9 +85,17 @@ class RecipeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Recipe $recipe)
+    public function show($slug)
     {
-        //
+        if (Recipe::where('slug', $slug)->exists()) {
+            $recipe = Recipe::where('slug', $slug)->first();
+            return view('recipes.show', [
+                'recipe' => Recipe::where('slug', $slug)->first(),
+                'views' => ViewerController::viewAndGet($recipe->id, 'recipes'),
+                'rating' => SaverController::get_rating($recipe->id),
+            ]);
+        }
+        return response()->redirectTo('/recipes');
     }
 
     /**

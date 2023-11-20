@@ -147,21 +147,17 @@
                         @endforeach
                     </span>
                 </div>
-                <h1 class="text-center py-2 font-extralight text-4xl">
-                    {{ \Illuminate\Support\Str::title($recipe->title) }}</h1>
+                <h1 class="text-center py-2 font-extralight text-4xl">{{ $recipe->title }}</h1>
                 <p class="text-center py-2 text-neutral-500 font-light">Published on
                     {{ date('F d, Y', strtotime($recipe->created_at)) }} &nbsp;&bull;&nbsp;
                     Updated on {{ date('F d, Y', strtotime($recipe->updated_at)) }}</p>
                 <p class="font-light text-center">
                     <span class="whitespace-nowrap">
-                        Views:&nbsp;&nbsp;{{ \App\Http\Controllers\ViewerController::viewAndGet($recipe->id, 'recipes') }}&nbsp;</i><i
-                            class="fa-regular fa-eye"></i>
+                        Views:&nbsp;&nbsp;{{ $views }}&nbsp;</i><i class="fa-regular fa-eye"></i>
                     </span>
                     <span class="whitespace-nowrap inline-block"><span class="text-2xl">&nbsp;&bull;&nbsp;</span></span>
                     <span class="whitespace-nowrap">
-                        Rating:&nbsp;{{ \App\Http\Controllers\SaverController::get_rating($recipe->id) }}&nbsp;<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i><i
-                            class="fa-regular fa-star"></i>
+                        Rating:&nbsp;{!! $rating === -1 ? 'Not Rated Yet' : number_format($rating, 1) . '&nbsp;<i class="fa-solid fa-star"></i>' !!}
                     </span>
                 </p>
                 <div class="py-1 text-center">
@@ -316,7 +312,10 @@
                 </section>
                 <div class="py-3">
                     <span class="font-semibold">Tags:</span>
-                    {{ \Illuminate\Support\Str::title(str_replace(',', ', ', $recipe->tags)) }}
+                    @foreach ($recipe->tags as $slug => $tag)
+                        <a class="px-1 bg-neutral-200 hover:bg-neutral-300 rounded"
+                            href="/recipes/tags/{{ $slug }}">{{ $tag }}</a>
+                    @endforeach
                 </div>
                 <section class="py-6">
                     <h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!
@@ -366,23 +365,33 @@
                     <div class="flex items-center flex-wrap bg-white p-3">
                         <span class="pr-7 text-2xl">Rate this recipe</span>
                         <fieldset class="rating-container">
-                            <input type="radio" name="rating" id="rate5" value="5">
+                            <input type="radio" name="rating" id="rate5" value="5"
+                                @auth
+{{ \App\Http\Controllers\SaverController::getRatingByUser($recipe->id) == 5 ? 'checked' : '' }} @endauth>
                             <label for="rate5">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate4" value="4">
+                            <input type="radio" name="rating" id="rate4" value="4"
+                                @auth
+{{ \App\Http\Controllers\SaverController::getRatingByUser($recipe->id) == 4 ? 'checked' : '' }} @endauth>
                             <label for="rate4">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate3" value="3">
+                            <input type="radio" name="rating" id="rate3" value="3"
+                                @auth
+{{ \App\Http\Controllers\SaverController::getRatingByUser($recipe->id) == 3 ? 'checked' : '' }} @endauth>
                             <label for="rate3">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate2" value="2">
+                            <input type="radio" name="rating" id="rate2" value="2"
+                                @auth
+{{ \App\Http\Controllers\SaverController::getRatingByUser($recipe->id) == 2 ? 'checked' : '' }} @endauth>
                             <label for="rate2">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
-                            <input type="radio" name="rating" id="rate1" value="1">
+                            <input type="radio" name="rating" id="rate1" value="1"
+                                @auth
+{{ \App\Http\Controllers\SaverController::getRatingByUser($recipe->id) == 1 ? 'checked' : '' }} @endauth>
                             <label for="rate1">
                                 <i class="fa-solid fa-star text-yellow-400"></i>
                             </label>
@@ -452,6 +461,15 @@
                         <span class="h-1 bg-neutral-600 flex-1"></span>
                     </div>
                     <div class="grid md:grid-cols-3 gap-5 py-2">
+                        @foreach ($recipe->relatedRecipes(3) as $relatedRecipe)
+                            <article>
+                                <a class="block transition-all duration-700 hover:scale-105" href="{{ route('recipes.show', ['slug' => $relatedRecipe->slug]) }}">
+                                    <img src="{{ $relatedRecipe->image_url }}"
+                                        alt="{{ $relatedRecipe->title }}" class="w-full h-64 object-cover block p-1 border">
+                                    <h4 class="py-1 text-lg font-light text-center">{{ $relatedRecipe->title }}</h4>
+                                </a>
+                            </article>
+                        @endforeach
                         <article>
                             <a class="block transition-all duration-700 hover:scale-105" href="">
                                 <img src="https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Cajun-chicken-one-pot-3f68774.jpg"

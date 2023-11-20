@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
@@ -62,7 +63,25 @@ class UserController extends Controller
     }
     public function index()
     {
-        return response()->json(User::all());
+        return response()->json(
+            DB::table('users')
+                ->crossJoinSub(function ($query) {
+                    $query->from('saved')
+                        ->select('user_id', DB::raw("count(*) as recipes_count"))
+                        ->where('savable_table', '=', 'recipes')
+                        ->groupBy('user_id');
+                }, 't2')
+                ->crossJoinSub(function ($query) {
+                    $query->from('saved')
+                        ->select('user_id', DB::raw("count(*) as articles_count"))
+                        ->where('savable_table', '=', 'articles')
+                        ->groupBy('user_id');
+                }, 't3')
+                ->select('*')
+                ->where('users.id', '=', DB::raw('t2.user_id'))
+                ->where('users.id', '=', DB::raw('t3.user_id'))
+                ->get()
+        );
     }
     private function compress($source_image)
     {
@@ -87,7 +106,7 @@ class UserController extends Controller
             }
             $new_image = Image::make($this->compress($request->file('image')->getRealPath()));
             $temp = min($new_image->width(), $new_image->height());
-            $new_image = $new_image->crop($temp,$temp);
+            $new_image = $new_image->crop($temp, $temp);
             $temp = "/uploads/user-" . $user->username . "-" . $user->id . "." . $request->file('image')->getClientOriginalExtension();
             $new_image->save(storage_path('app' . $temp));
             $user->photo_url = $temp;

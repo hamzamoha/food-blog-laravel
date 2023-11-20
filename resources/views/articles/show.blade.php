@@ -114,7 +114,10 @@
                 </div>
                 <div class="py-3">
                     <span class="font-semibold">Tags:</span>
-                    {{ \Illuminate\Support\Str::title(str_replace(',', ', ', $article->tags)) }}
+                    @foreach ($article->tags as $slug => $tag)
+                        <a class="px-1 bg-neutral-200 hover:bg-neutral-300 rounded"
+                            href="/articles/tags/{{ $slug }}">{{ $tag }}</a>
+                    @endforeach
                 </div>
                 <section class="py-6">
                     <h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!
@@ -221,6 +224,15 @@
                         <span class="h-1 bg-neutral-600 flex-1"></span>
                     </div>
                     <div class="grid md:grid-cols-3 gap-5 py-2">
+                        @foreach ($article->relatedArticles(3) as $relatedArticle)
+                        <article>
+                            <a class="block transition-all duration-700 hover:scale-105" href="{{ route('articles.show', ['slug' => $relatedArticle->slug]) }}">
+                                <img src="{{ $relatedArticle->image_url }}"
+                                    alt="{{ $relatedArticle->title }}" class="w-full h-64 object-cover block p-1 border">
+                                <h4 class="py-1 text-lg font-light text-center">{{ $relatedArticle->title }}</h4>
+                            </a>
+                        </article>
+                    @endforeach
                         <article>
                             <a class="block transition-all duration-700 hover:scale-105" href="">
                                 <img src="https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Cajun-chicken-one-pot-3f68774.jpg"

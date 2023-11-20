@@ -17,6 +17,12 @@ class ArticleController extends Controller
      */
     public function index()
     {
+        return view('articles.index', [
+            "articles" => Article::paginate(8)
+        ]);
+    }
+    public function index_api()
+    {
         return response()->json(Article::with("categories")->get());
     }
 
@@ -34,12 +40,12 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $slug = Str::slug($request->input("title", ""));
-        if(Article::where('slug', $slug)->exists()){
+        if (Article::where('slug', $slug)->exists()) {
             $count = 1;
             while (Article::where('slug', "$slug-$count")->exists()) {
                 $count += 1;
             }
-            $slug = $slug-$count;
+            $slug = $slug - $count;
         }
         $article = Article::create([
             "title" => Str::title($request->input("title", "")),
@@ -63,9 +69,13 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Article $article)
+    public function show($slug)
     {
-        //
+        if (Article::where('slug', $slug)->exists())
+            return view('articles.show', [
+                'article' => Article::where('slug', $slug)->first()
+            ]);
+        return response()->redirectTo('/articles');
     }
 
     /**

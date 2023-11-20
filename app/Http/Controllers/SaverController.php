@@ -66,13 +66,24 @@ class SaverController extends Controller
     public static function get_rating($recipe_id)
     {
         $rating = DB::table("rating")->where([
-            'user_id' => auth()->user()->id,
-            'recipe_id' => $recipe_id,
+            'recipe_id' => $recipe_id
         ]);
         if ($rating->exists()) {
             return DB::table('rating')
                 ->where('recipe_id', $recipe_id)
                 ->avg('value');
         } else return -1;
+    }
+    private static function isRatedByUser($recipe_id) : bool {
+        return DB::table("rating")->where([
+            'recipe_id' => $recipe_id,
+            'user_id' => auth()->user()->id
+        ])->exists();
+    }
+    public static function getRatingByUser($recipe_id) : int {
+        return self::isRatedByUser($recipe_id)?DB::table("rating")->where([
+            'recipe_id' => $recipe_id,
+            'user_id' => auth()->user()->id
+        ])->first()->value:-1;
     }
 }

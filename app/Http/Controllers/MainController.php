@@ -23,32 +23,5 @@ class MainController extends Controller
         })->orderByDesc("recipes.id")->orderByDesc("views.views_count")->take(10)->get(['title', 'image_url', 'slug']);
         return view('index', compact("categories", "recipes", "articles", "featured_recipe", "popular_recipes"));
     }
-    public function recipe($slug)
-    {
-        if (Recipe::where('slug', $slug)->exists())
-            return view('recipes.show', [
-                'recipe' => Recipe::where('slug', $slug)->first()
-            ]);
-        return response()->redirectTo('/recipes');
-    }
-    public function recipes()
-    {
-        return view('recipes.index', [
-            "recipes" => Recipe::paginate(8)
-        ]);
-    }
-    public function article($slug)
-    {
-        if (Article::where('slug', $slug)->exists())
-            return view('articles.show', [
-                'article' => Article::where('slug', $slug)->first()
-            ]);
-        return response()->redirectTo('/articles');
-    }
-    public function articles()
-    {
-        return view('articles.index', [
-            "articles" => Article::paginate(8)
-        ]);
-    }
+    
 }
