@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Recipe extends Model
@@ -26,14 +26,25 @@ class Recipe extends Model
     protected function tags(): Attribute
     {
         return Attribute::make(
-            get: function (string $value) {
-                $t = [];
-                $e = explode(",", $value);
-                foreach ($e as $s) {
-                    $t[strtolower($s)] = Str::title($s);
-                }
-                return $t;
-            },
+            get: fn (string $value) => explode(",", strtolower($value)),
+        );
+    }
+    protected function content(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => DB::table("recipes_contents")->where("recipe_id", $this->id)->first()->content,
+        );
+    }
+    protected function cookingMethod(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => implode(", ", array_map(fn ($x) => Str::title($x), explode(",", strtolower($value)))),
+        );
+    }
+    protected function difficultyLevel(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => Str::title($value),
         );
     }
     public function categories(): BelongsToMany
@@ -43,6 +54,10 @@ class Recipe extends Model
     public function ingredients(): BelongsToMany
     {
         return $this->belongsToMany(Ingredient::class, "recipes_ingredients");
+    }
+    public function instructions(): HasMany
+    {
+        return $this->hasMany(Instruction::class);
     }
     public function comments(): MorphMany
     {

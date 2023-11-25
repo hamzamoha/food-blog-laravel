@@ -48,13 +48,22 @@ Route::name("comments.")->controller(CommentController::class)->group(function (
 Route::name("recipes.")->prefix("recipes")->controller(RecipeController::class)->group(function () {
     Route::get('/', "index")->name("index");
     Route::get('/{slug}', "show")->name("show");
+    Route::get('/category/{category}', "index_category")->name("index_category");
+    Route::get('/tag/{tag}', "index_tag")->name("index_tag");
 });
 Route::name("articles.")->prefix("articles")->controller(ArticleController::class)->group(function () {
     Route::get('/', "index")->name("index");
     Route::get('/{slug}', "show")->name("show");
+    Route::get('/category/{category}', "index_category")->name("index_category");
+    Route::get('/tag/{tag}', "index_tag")->name("index_tag");
 });
 
-Route::get('/', [MainController::class, 'index'])->name("home");
+Route::controller(MainController::class)->group(function() {
+    Route::get('/', 'index')->name("home");
+    Route::get('/search', 'search')->name("search");
+    Route::get('/categories', 'categories')->name("categories");
+});
+
 
 Route::get('/admin', [AdminController::class, 'index']);
 
@@ -105,6 +114,9 @@ Route::prefix('api')->group(function () {
         Route::middleware("auth")->group(function () {
             Route::post('/', 'rating')->name("rating");
         });
+    });
+    Route::prefix("dashboard")->controller(AdminController::class)->group(function () {
+        Route::get("/", "dashboard")->name("dashboard");
     });
 })->name('api.');
 

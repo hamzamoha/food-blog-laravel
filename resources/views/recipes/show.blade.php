@@ -140,7 +140,7 @@
                     <span>
                         @foreach ($recipe->categories as $key => $category)
                             <a class="font-bold text-sm text-blue-400 uppercase"
-                                href="#">{{ $category->label }}</a>
+                                href="{{ route('recipes.index_category', ['category' => $category->slug]) }}">{{ $category->label }}</a>
                             @if ($key < count($recipe->categories) - 1)
                                 <span>&nbsp;|&nbsp;</span>
                             @endif
@@ -186,100 +186,7 @@
                     class="w-[700px] max-w-full mx-auto my-5 rounded-sm block p-1 border shadow"
                     alt="{{ $recipe->title }}" title="{{ $recipe->title }}">
                 <div class="ck-content text-lg font-light py-5">
-                    <p style="margin-left:0px;">
-                        <strong>Ingredients:</strong>
-                    </p>
-                    <ul>
-                        <li>
-                            8 ounces (about 225 grams) of spaghetti
-                        </li>
-                        <li>
-                            2 large eggs
-                        </li>
-                        <li>
-                            1 cup (about 100 grams) of grated Pecorino Romano cheese
-                        </li>
-                        <li>
-                            4 ounces (about 115 grams) of pancetta or guanciale, diced
-                        </li>
-                        <li>
-                            2 cloves of garlic, minced
-                        </li>
-                        <li>
-                            Salt and black pepper, to taste
-                        </li>
-                        <li>
-                            Fresh parsley, chopped, for garnish (optional)
-                        </li>
-                    </ul>
-                    <p style="margin-left:0px;">
-                        <strong>Instructions:</strong>
-                    </p>
-                    <p style="margin-left:0px;">
-                        <strong>Prepare the Pasta:</strong>
-                    </p>
-                    <ul>
-                        <li>
-                            Bring a large pot of salted water to a boil. Add the spaghetti and cook according to the
-                            package instructions until al dente. Drain the pasta, but reserve about 1/2 cup of the
-                            cooking water.
-                        </li>
-                    </ul>
-                    <p style="margin-left:0px;">
-                        <strong>Cook the Pancetta (or Guanciale):</strong>
-                    </p>
-                    <ul>
-                        <li>
-                            In a large skillet, cook the diced pancetta (or guanciale) over medium heat until it becomes
-                            crispy and lightly browned, usually about 5-7 minutes. Remove it from the pan with a slotted
-                            spoon and set it aside.
-                        </li>
-                    </ul>
-                    <p style="margin-left:0px;">
-                        <strong>Prepare the Sauce:</strong>
-                    </p>
-                    <ul>
-                        <li>
-                            In a bowl, whisk together the eggs, grated Pecorino Romano cheese, minced garlic, and a
-                            generous amount of freshly ground black pepper. Mix until well combined.
-                        </li>
-                    </ul>
-                    <p style="margin-left:0px;">
-                        <strong>Combine the Pasta and Sauce:</strong>
-                    </p>
-                    <ul>
-                        <li>
-                            While the cooked pasta is still hot, quickly toss it with the egg and cheese mixture. The
-                            heat from the pasta will gently cook the eggs and create a creamy sauce. If the mixture is
-                            too thick, add a little of the reserved pasta cooking water to reach the desired
-                            consistency.
-                        </li>
-                    </ul>
-                    <p style="margin-left:0px;">
-                        <strong>Add Pancetta (or Guanciale):</strong>
-                    </p>
-                    <ul>
-                        <li>
-                            Mix in the crispy pancetta (or guanciale) that you had set aside.
-                        </li>
-                    </ul>
-                    <p style="margin-left:0px;">
-                        <strong>Serve and Garnish:</strong>
-                    </p>
-                    <ul>
-                        <li>
-                            Plate the spaghetti carbonara, garnish with chopped fresh parsley (if desired), and sprinkle
-                            with extra Pecorino Romano cheese and black pepper.
-                        </li>
-                    </ul>
-                    <p style="margin-left:0px;">
-                        Spaghetti carbonara is best enjoyed immediately while it's still warm. It's a delicious, creamy,
-                        and indulgent pasta dish that's sure to satisfy your cravings for Italian comfort food. Enjoy!
-                    </p>
-                    <p style="margin-left:0px;">
-                        Feel free to adjust the ingredients and measurements to suit your preferences, and remember to
-                        savor this classic pasta dish with a nice glass of wine if you like.
-                    </p>
+                    {!! $recipe->content !!}
                 </div>
                 <section class="my-5 bg-green-400 p-3">
                     <h3 class="py-1 text-2xl font-semibold">Ingredients</h3>
@@ -296,25 +203,16 @@
                 <section class="p-3 my-5 bg-yellow-100">
                     <h3 class="py-1 text-2xl font-semibold">Instructions</h3>
                     <ol class="list-decimal px-8">
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">800g-1kg prepared chicken wings </li>
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">1-1.5 litres corn or rapeseed oil,
-                            for deep-frying </li>
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">celery crudités, to serve (optional)
-                        </li>
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">½ tsp chilli powder </li>
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">large pinch of cayenne pepper </li>
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">3 tbsp cornflour </li>
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">25g butter, melted </li>
-                        <li class="list-item my-2 pt-1 border-b border-yellow-800">4 tbsp American-style hot sauce,
-                            plus
-                            1 tsp </li>
+                        @foreach ($recipe->instructions as $instruction)
+                            <li class="list-item my-2 pt-1 border-b border-yellow-800">{{$instruction->content}}</li>
+                        @endforeach
                     </ol>
                 </section>
                 <div class="py-3">
                     <span class="font-semibold">Tags:</span>
-                    @foreach ($recipe->tags as $slug => $tag)
+                    @foreach ($recipe->tags as $tag)
                         <a class="px-1 bg-neutral-200 hover:bg-neutral-300 rounded"
-                            href="/recipes/tags/{{ $slug }}">{{ $tag }}</a>
+                            href="{{ route('recipes.index_tag', ['tag' => $tag]) }}">{{ \Illuminate\Support\Str::title($tag) }}</a>
                     @endforeach
                 </div>
                 <section class="py-6">
@@ -463,9 +361,10 @@
                     <div class="grid md:grid-cols-3 gap-5 py-2">
                         @foreach ($recipe->relatedRecipes(3) as $relatedRecipe)
                             <article>
-                                <a class="block transition-all duration-700 hover:scale-105" href="{{ route('recipes.show', ['slug' => $relatedRecipe->slug]) }}">
-                                    <img src="{{ $relatedRecipe->image_url }}"
-                                        alt="{{ $relatedRecipe->title }}" class="w-full h-64 object-cover block p-1 border">
+                                <a class="block transition-all duration-700 hover:scale-105"
+                                    href="{{ route('recipes.show', ['slug' => $relatedRecipe->slug]) }}">
+                                    <img src="{{ $relatedRecipe->image_url }}" alt="{{ $relatedRecipe->title }}"
+                                        class="w-full h-64 object-cover block p-1 border">
                                     <h4 class="py-1 text-lg font-light text-center">{{ $relatedRecipe->title }}</h4>
                                 </a>
                             </article>

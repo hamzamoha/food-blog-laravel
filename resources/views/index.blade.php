@@ -42,8 +42,7 @@
     <section class="relative h-[600px] overflow-hidden">
         <img class="w-full h-full object-cover scale-[1.05] blur-[3px]" src="{{ $featured_recipe->image_url }}"
             alt="Blackforest Peanut Cake" title="Blackforest Peanut Cake">
-        <div class="absolute top-0 left-0 w-full h-full bg-blue-500 bg-opacity-20">
-        </div>
+        <div class="absolute top-0 left-0 w-full h-full bg-blue-500 bg-opacity-20"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-6xl w-full flex justify-left">
             <div class="mr-auto w-[500px] max-w-full p-8 bg-white">
                 <div class="text-neutral-500 text-sm uppercase">
@@ -97,7 +96,7 @@
                         @endforeach
                     </div>
                     <h3 class="text-2xl font-light py-2 leading-tight"><?= $article->title ?></h3>
-                    <p class="text-sm text-neutral-600 py-1 leading-tight line-clamp-2"><?= $article->description ?></p>
+                    <p class="text-sm text-neutral-600 py-1 leading-tight line-clamp-2">snippet</p>
                     <div class="py-3 text-sm text-neutral-500 flex items-center">
                         <time datetime="2023-10-12 21:00">{{ $article->created_at->diffForHumans() }}</time>
                         <div class="ml-auto">

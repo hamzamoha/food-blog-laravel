@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Recipe;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class MainController extends Controller
@@ -20,8 +21,22 @@ class MainController extends Controller
         //$popular_recipes = Recipe::inRandomOrder()->take(10)->get(['title', 'image_url', 'slug']);
         $popular_recipes = DB::table("recipes")->leftJoinSub(DB::table("views")->where("views.viewable_table", "=", "recipes"), "views", function (JoinClause $join) {
             $join->on('views.viewable_id', '=', 'recipes.id');
-        })->orderByDesc("recipes.id")->orderByDesc("views.views_count")->take(10)->get(['title', 'image_url', 'slug']);
+        })->orderByDesc("views.views_count")->orderByDesc("recipes.id")->take(10)->get(['title', 'image_url', 'slug']);
         return view('index', compact("categories", "recipes", "articles", "featured_recipe", "popular_recipes"));
     }
-    
+    public function search()
+    {
+        $q = request("q", "");
+        $category = request("category", "");
+        $recipes = Recipe::where(function ($query) use ($q) {
+            $query->where(DB::raw("lower(title)"), "like", "%$q%")
+                ->orWhere(DB::raw("lower(description)"), "like", "%$q%");
+        });
+        if ($category !== "") $recipes = $recipes->whereRelation('categories', 'slug', $category);
+        $recipes = $recipes->paginate(8)->withQueryString();
+        return view("search")->with("recipes", $recipes)->with("search_message", "Search Result for '$q'" . ($category !== ""?" in the Category '".Str::title($category)."'":""));
+    }
+    public function categories() {
+        return view("pages.categories")->with("categories", Category::orderBy('label')->get());
+    }
 }

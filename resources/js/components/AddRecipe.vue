@@ -85,13 +85,28 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="border-b">
                                 <td class="w-[1%] py-5 px-4 align-top">Content</td>
                                 <td class="py-5 px-4">
                                     <div class="relative">
                                         <textarea class="h-0 w-0 absolute overflow-hidden opacity-0 invisible"
                                             v-model="content" name="content"></textarea>
                                         <div class="editor"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="w-[1%] py-5 px-4 align-top">Instructions</td>
+                                <td class="py-5 px-4">
+                                    <div class="relative">
+                                        <div class="relative py-1">
+                                            <div v-for="(instruction, index) in instructions" :key="index" class="pl-10 my-2 relative">
+                                                <span class="absolute top-0 left-0 h-10 w-10 leading-10 text-center">{{ index + 1 }}</span>
+                                                <input name="instructions[]" type="text" v-model="instruction.vlaue"
+                                                class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
+                                            </div>
+                                            <button class="py-1 px-2 font-medium text-sm rounded bg-blue-300" type="button" @click="instructions.push({value: ''})">Add Instruction</button>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -195,7 +210,7 @@ watchdog.setCreator((element, config) => {
 watchdog.setDestructor(editor => {
     return editor.destroy();
 });
-watchdog.on('error', (error) => {});
+watchdog.on('error', (error) => { });
 import SimpleUploadAdapterPlugin from "../ckeditor-upload-adapter"
 export default {
     name: "AddRecipe",
@@ -214,6 +229,7 @@ export default {
             categories: [],
             recipe_tags: [],
             content: '',
+            instructions: [],
         }
     },
     methods: {
@@ -280,14 +296,14 @@ export default {
         watchdog
             .create(document.querySelector('.editor'), {
                 initialData: "I am an initial text",
-                extraPlugins: [ SimpleUploadAdapterPlugin ],
+                extraPlugins: [SimpleUploadAdapterPlugin],
             })
             .then(() => {
                 watchdog.editor.model.document.on('change:data', () => {
                     this.content = watchdog.editor.getData();
                 });
             })
-            .catch((error)=>{});
+            .catch((error) => { });
     },
 }
 </script>

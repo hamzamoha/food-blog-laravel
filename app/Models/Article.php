@@ -22,14 +22,7 @@ class Article extends Model
     protected function tags(): Attribute
     {
         return Attribute::make(
-            get: function (string $value) {
-                $t = [];
-                $e = explode(",", $value);
-                foreach ($e as $s) {
-                    $t[strtolower($s)] = Str::title($s);
-                }
-                return $t;
-            },
+            get: fn (string $value) => explode(",", strtolower($value)),
         );
     }
     public function categories(): BelongsToMany

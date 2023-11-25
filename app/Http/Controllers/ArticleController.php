@@ -18,14 +18,21 @@ class ArticleController extends Controller
     public function index()
     {
         return view('articles.index', [
-            "articles" => Article::paginate(8)
+            "articles" => Article::orderByDesc('id')->paginate(8)
         ]);
     }
     public function index_api()
     {
-        return response()->json(Article::with("categories")->get());
+        return response()->json(Article::with("categories")->orderByDesc('id')->get());
     }
-
+    public function index_category($category)
+    {
+        return view('articles.search')->with("articles", Article::whereRelation('categories', 'slug', $category)->orderByDesc('id')->paginate(8))->with("search_message", "Articles in the Category '" . Str::title($category) . "'");
+    }
+    public function index_tag($tag)
+    {
+        return view('articles.search')->with("articles", Article::where(DB::raw("lower(tags)"), 'like', "%$tag%")->orderByDesc('id')->paginate(8))->with("search_message", "Articles Tagged '" . Str::title($tag) . "'");;
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -71,10 +78,13 @@ class ArticleController extends Controller
      */
     public function show($slug)
     {
-        if (Article::where('slug', $slug)->exists())
+        if (Article::where('slug', $slug)->exists()) {
+            $article = Article::where('slug', $slug)->first();
             return view('articles.show', [
-                'article' => Article::where('slug', $slug)->first()
+                'article' => $article,
+                'views' => ViewerController::viewAndGet($article->id, 'articles'),
             ]);
+        }
         return response()->redirectTo('/articles');
     }
 

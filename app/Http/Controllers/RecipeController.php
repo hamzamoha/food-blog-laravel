@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Instruction;
 use App\Models\Recipe;
 use HTMLPurifier;
 use HTMLPurifier_Config;
@@ -20,12 +21,20 @@ class RecipeController extends Controller
     public function index()
     {
         return view('recipes.index', [
-            "recipes" => Recipe::paginate(8)
+            "recipes" => Recipe::orderByDesc('id')->paginate(8)
         ]);
     }
     public function index_api()
     {
-        return response()->json(Recipe::with("categories")->get());
+        return response()->json(Recipe::with("categories")->orderByDesc('id')->get());
+    }
+    public function index_category($category)
+    {
+        return view('recipes.search')->with("recipes", Recipe::whereRelation('categories', 'slug', $category)->orderByDesc('id')->paginate(8))->with("search_message", "Recipes in the Category '" . Str::title($category) . "'");
+    }
+    public function index_tag($tag)
+    {
+        return view('recipes.search')->with("recipes", Recipe::where(DB::raw("lower(tags)"), 'like', "%$tag%")->orderByDesc('id')->paginate(8))->with("search_message", "Recipes Tagged '" . Str::title($tag) . "'");;
     }
 
     /**
@@ -77,6 +86,13 @@ class RecipeController extends Controller
             "recipe_id" => $recipe->id,
             "content" => (new HTMLPurifier(HTMLPurifier_Config::createDefault()))->purify($request->input("content"))
         ]);
+        $instructions = request("instructions");
+        foreach ($instructions as $key => $instruction) {
+            Instruction::create([
+                "recipe_id" => $recipe->id,
+                "content" => $instruction,
+            ]);
+        }
         $recipe->image_url = "/" . $request->file('image')->storeAs("uploads", "recipe-" . $recipe->slug . "-" . $recipe->id . "." . $request->file('image')->getClientOriginalExtension());
         $recipe->save();
         return redirect("/admin")->withFragment("#/recipes");
@@ -90,7 +106,7 @@ class RecipeController extends Controller
         if (Recipe::where('slug', $slug)->exists()) {
             $recipe = Recipe::where('slug', $slug)->first();
             return view('recipes.show', [
-                'recipe' => Recipe::where('slug', $slug)->first(),
+                'recipe' => $recipe,
                 'views' => ViewerController::viewAndGet($recipe->id, 'recipes'),
                 'rating' => SaverController::get_rating($recipe->id),
             ]);

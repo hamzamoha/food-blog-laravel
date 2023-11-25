@@ -5,24 +5,23 @@
                     class="block mx-auto lg:pl-1 block h-16"></a>
         </div>
         <div id="search_form" class="w-full mb-4 md:my-0 md:w-auto md:mr-auto md:ml-1 lg:mr-0 lg:ml-auto">
-            <form class="border flex" action="search">
+            <form class="border flex" action="{{ route('search') }}">
                 <select name="category" id="category"
                     class="px-3 py-2 lg:py-3 lg:px-2 text-xs font-semibold outline-none uppercase border-white border-2 bg-neutral-100 transition-all hover:bg-neutral-200 cursor-pointer">
-                    <option value="all" selected>All Categories</option>
-                    <option class="text-[2px]" disabled></option>
-                    <option value="desserts">Desserts</option>
-                    <option class="text-[2px]" disabled></option>
-                    <option value="diets">Diets</option>
-                    <option class="text-[2px]" disabled></option>
-                    <option value="breakfast">Breakfast</option>
-                    <option class="text-[2px]" disabled></option>
-                    <option value="11">Salads</option>
-                    <option class="text-[2px]" disabled></option>
-                    <option value="drinks">Drinks</option>
-                    <option class="text-[2px]" disabled></option>
-                    <option value="fast_food">Fast Food</option>
+                    @php
+                        $categories = \App\Models\Category::withCount('recipes')
+                            ->orderBy('recipes_count', 'desc')
+                            ->take(6)->get();
+                        $cat = request("category", "");
+                        $q = request("q", "");
+                    @endphp
+                    <option value="" @selected($cat == "")>All Categories</option>
+                    @foreach ($categories as $category)
+                        <option class="text-[2px]" disabled></option>
+                        <option value="{{ $category->slug }}" @selected($cat == $category->slug)>{{ $category->label }}</option>
+                    @endforeach
                 </select>
-                <input placeholder="Search recipes..." type="text" id="q" name="q"
+                <input placeholder="Search recipes..." type="text" id="q" name="q" value="{{$q}}"
                     class="flex-1 px-1 py-3 border-none bg-none focus:outline-none w-72 text-sm">
                 <button type="submit" class="w-12 h-12 bg-yellow-300 transition-all hover:bg-amber-200">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -67,7 +66,7 @@
                 </a>
             </li>
             <li class="mr-3">
-                <a href="/"
+                <a href="{{ route('categories') }}"
                     class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
                     Categories
                 </a>
