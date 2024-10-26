@@ -91,12 +91,11 @@
                     <img src="{{ $article->image_url }}" alt="" class="block w-full h-64 mb-3 object-cover">
                     <div class="text-neutral-500 text-sm uppercase">
                         @foreach ($article->categories as $category)
-                            <a href="/category/{{ $category->slug }}" class="inline-flex items-center"><i
-                                    class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i> {{ $category->label }}</a>
+                            <a href="/category/{{ $category->slug }}" class="inline-flex items-center"><i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i> {{ $category->label }}</a>
                         @endforeach
                     </div>
                     <h3 class="text-2xl font-light py-2 leading-tight"><?= $article->title ?></h3>
-                    <p class="text-sm text-neutral-600 py-1 leading-tight line-clamp-2">snippet</p>
+                    <p class="text-sm text-neutral-600 py-1 leading-tight line-clamp-2">{{ Str::of(strip_tags($article->content))->limit() }}</p>
                     <div class="py-3 text-sm text-neutral-500 flex items-center">
                         <time datetime="2023-10-12 21:00">{{ $article->created_at->diffForHumans() }}</time>
                         <div class="ml-auto">
@@ -169,7 +168,7 @@
                             <span>
                                 <i class="fa-solid mr-1 fa-tag fa-flip-horizontal"></i>
                                 @foreach ($recipe->categories as $key => $category)
-                                    <a href="/category/{{ $category->slug }}" class="inline-flex items-center">
+                                    <a href="/recipes/category/{{ $category->slug }}" class="inline-flex items-center">
                                         {{ $category->label }}
                                     </a>
                                     @if ($key < count($recipe->categories) - 1)

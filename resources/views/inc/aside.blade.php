@@ -60,6 +60,6 @@
         </div>
     </div>
     <div class="my-5">
-        <img src="./images/find-us-on-youtube.jpg" alt="Find Us On Youtube" class="block">
+        <img src="/images/find-us-on-youtube.jpg" alt="Find Us On Youtube" class="block">
     </div>
 </aside>

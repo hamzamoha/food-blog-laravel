@@ -359,7 +359,7 @@
                         <span class="h-1 bg-neutral-600 flex-1"></span>
                     </div>
                     <div class="grid md:grid-cols-3 gap-5 py-2">
-                        @foreach ($recipe->relatedRecipes(3) as $relatedRecipe)
+                        @foreach ($recipe->relatedRecipes(6) as $relatedRecipe)
                             <article>
                                 <a class="block transition-all duration-700 hover:scale-105"
                                     href="{{ route('recipes.show', ['slug' => $relatedRecipe->slug]) }}">
@@ -369,27 +369,6 @@
                                 </a>
                             </article>
                         @endforeach
-                        <article>
-                            <a class="block transition-all duration-700 hover:scale-105" href="">
-                                <img src="https://images.immediate.co.uk/production/volatile/sites/30/2022/08/Cajun-chicken-one-pot-3f68774.jpg"
-                                    alt="" class="w-full h-64 object-cover block p-1 border">
-                                <h4 class="py-1 text-lg font-light text-center">Cajun chicken pasta</h4>
-                            </a>
-                        </article>
-                        <article>
-                            <a class="block transition-all duration-700 hover:scale-105" href="">
-                                <img src="https://images.immediate.co.uk/production/volatile/sites/30/2023/08/Chicken-tinga-tacos-4d3272f.jpg"
-                                    alt="" class="w-full h-64 object-cover block p-1 border">
-                                <h4 class="py-1 text-lg font-light text-center">Chicken tinga tacos</h4>
-                            </a>
-                        </article>
-                        <article>
-                            <a class="block transition-all duration-700 hover:scale-105" href="">
-                                <img src="https://images.immediate.co.uk/production/volatile/sites/30/2023/05/Next-level-buffalo-wings-56607c2.jpg  "
-                                    alt="" class="w-full h-64 object-cover block p-1 border">
-                                <h4 class="py-1 text-lg font-light text-center">Next level buffalo wings</h4>
-                            </a>
-                        </article>
                     </div>
                 </section>
             </main>

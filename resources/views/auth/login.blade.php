@@ -166,7 +166,7 @@
                 </form>
             </div>
             <div id="blind"
-                class="absolute w-1/2 h-full top-0 left-0 z-20 transition-all duration-500 flex items-center justify-center flex-wrap flex-col">
+                class="absolute w-1/2 h-full top-0 left-1/2 z-20 transition-all duration-500 flex items-center justify-center flex-wrap flex-col">
                 <img src="/images/logo.svg" alt="Logo" title="{{ env('APP_NAME', 'Cuisine Compass') }}"
                     class="w-96 max-w-full mx-auto block mb-20 rounded grayscale brightness-[4]">
                 <div class="text-7xl text-white pb-20 w-full text-center">

@@ -34,9 +34,10 @@ class MainController extends Controller
         });
         if ($category !== "") $recipes = $recipes->whereRelation('categories', 'slug', $category);
         $recipes = $recipes->paginate(8)->withQueryString();
-        return view("search")->with("recipes", $recipes)->with("search_message", "Search Result for '$q'" . ($category !== ""?" in the Category '".Str::title($category)."'":""));
+        return view("recipes.search")->with("recipes", $recipes)->with("search_message", "Search Result for \"$q\"" . ($category !== "" ? " in the Category \"" . Str::title($category) . "\"" : ""));
     }
-    public function categories() {
+    public function categories()
+    {
         return view("pages.categories")->with("categories", Category::orderBy('label')->get());
     }
 }
