@@ -30,6 +30,12 @@ jobs:
       - name: Run composer install if composer.json exists
         if: steps.check_files.outputs.files_exists == 'true'
         run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+        
+      - name: Run npm i
+        run: npm install && npm run build
+
+      - name: Remove node_modules
+        run: rm -rdf node_modules
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
@@ -57,6 +63,9 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
+
+      - name: Delete the zip file
+        run: rm -f release.zip
       
       - name: Login to Azure
         uses: azure/login@v2
