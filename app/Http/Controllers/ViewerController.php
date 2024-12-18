@@ -38,11 +38,13 @@ class ViewerController extends Controller
         $viewer = DB::table("views")->where([
             "viewable_id" => $id,
             "viewable_table" => $table,
+            "viewed_at" => date('Y-m-d'),
         ])->first();
         if (!$viewer) {
             $viewer = DB::table("views")->find(DB::table("views")->insertGetId([
                 "viewable_id" => $id,
                 "viewable_table" => $table,
+                "viewed_at" => date('Y-m-d'),
             ]));
         }
         DB::table("views")->where('id', $viewer->id)->update([

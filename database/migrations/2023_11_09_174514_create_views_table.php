@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('viewable_table');
             $table->unsignedBigInteger("viewable_id")->nullable();
             $table->unsignedBigInteger("views_count")->default(0);
-            $table->date("viewed_at")->default(DB::raw('CURRENT_DATE'));
+            $table->date("viewed_at")->nullable();
         });
     }
 
