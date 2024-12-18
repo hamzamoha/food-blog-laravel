@@ -5,7 +5,7 @@
                     class="block mx-auto lg:pl-1 block h-16"></a>
         </div>
         <div id="search_form" class="w-full mb-4 md:my-0 md:w-auto md:mr-auto md:ml-1 lg:mr-0 lg:ml-auto">
-            <form class="border flex" action="{{ route('search') }}">
+            <form class="border flex" action="{{ route('search', [], false) }}">
                 <select name="category" id="category"
                     class="px-3 py-2 lg:py-3 lg:px-2 text-xs font-semibold outline-none uppercase border-white border-2 bg-neutral-100 transition-all hover:bg-neutral-200 cursor-pointer">
                     @php
@@ -32,11 +32,11 @@
             <ul class="flex items-center pl-3 justify-center">
                 @auth
                     <li class="border-r">
-                        <a href="{{ route('auth.profile') }}"
+                        <a href="{{ route('auth.profile', [], false) }}"
                             class="py-2 px-3 transition-all hover:text-neutral-500">{{ auth()->user()->firstname }}</a>
                     </li>
                     <li>
-                        <form action="{{ route('auth.logout') }}" method="POST">
+                        <form action="{{ route('auth.logout', [], false) }}" method="POST">
                             @csrf
                             <button type="submit" class="py-2 px-3 transition-all hover:text-neutral-500">
                                 Logout
@@ -46,11 +46,11 @@
                 @endauth
                 @guest
                     <li class="border-r">
-                        <a href="{{ route('auth.login') }}"
+                        <a href="{{ route('auth.login', [], false) }}"
                             class="py-2 px-3 transition-all hover:text-neutral-500">Login</a>
                     </li>
                     <li>
-                        <a href="{{ route('auth.register') }}"
+                        <a href="{{ route('auth.register', [], false) }}"
                             class="py-2 px-3 transition-all hover:text-neutral-500">Register</a>
                     </li>
                 @endguest
@@ -66,19 +66,19 @@
                 </a>
             </li>
             <li class="mr-3">
-                <a href="{{ route('categories') }}"
+                <a href="{{ route('categories', [], false) }}"
                     class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
                     Categories
                 </a>
             </li>
             <li class="mr-3">
-                <a href="{{ route('recipes.index') }}"
+                <a href="{{ route('recipes.index', [], false) }}"
                     class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
                     Recipes
                 </a>
             </li>
             <li class="mr-3">
-                <a href="{{ route('articles.index') }}"
+                <a href="{{ route('articles.index', [], false) }}"
                     class="block text-sm font-bold text-neutral-600 px-3 py-5 transition-all hover:text-white hover:bg-amber-300 uppercase">
                     Articles
                 </a>

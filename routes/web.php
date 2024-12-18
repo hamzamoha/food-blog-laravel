@@ -11,8 +11,11 @@ use App\Http\Controllers\SaverController;
 use App\Http\Controllers\StorageController;
 use App\Http\Controllers\UserController;
 use App\Models\Article;
+use App\Models\Instruction;
 use App\Models\Recipe;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,19 +61,21 @@ Route::name("articles.")->prefix("articles")->controller(ArticleController::clas
     Route::get('/tag/{tag}', "index_tag")->name("index_tag");
 });
 
-Route::controller(MainController::class)->group(function() {
+Route::controller(MainController::class)->group(function () {
     Route::get('/', 'index')->name("home");
     Route::get('/search', 'search')->name("search");
     Route::get('/categories', 'categories')->name("categories");
 });
 
 
-Route::get('/admin', [AdminController::class, 'index']);
+Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+Route::post('/admin', [AdminController::class, 'login']);
 
 Route::get('/uploads/{url}', [StorageController::class, 'uploads']);
 Route::get('/ckeditor/{url}', [StorageController::class, 'ckeditor']);
 
-Route::prefix('api')->group(function () {
+Route::prefix('api')->middleware("auth:admin")->group(function () {
     Route::prefix('recipes')->group(function () {
         Route::controller(RecipeController::class)->group(function () {
             Route::get('/', 'index_api')->name("index");
@@ -124,8 +129,8 @@ Route::get('/test', function () {
     exit(0);
     for ($i = 1; $i <= 6; $i++) {
         $article = new Article();
-        $article->title = \Illuminate\Support\Str::title(fake()->sentence());
-        $article->slug = \Illuminate\Support\Str::slug($article->title);
+        $article->title = Str::title(fake()->sentence());
+        $article->slug = Str::slug($article->title);
         if (Article::where('slug', $article->slug)->exists()) {
             $count = 1;
             while (Article::where('slug', "$article->slug-$count")->exists()) {

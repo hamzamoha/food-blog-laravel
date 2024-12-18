@@ -9,10 +9,19 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    public function index() {
-        return view("admin.index");
+    public function __construct()
+    {
+        // Apply middleware only to specific methods
+        $this->middleware('auth:admin')->only(['dashboard']);
     }
-    public function dashboard() {
+    public function index()
+    {
+        if (auth('admin')->check())
+            return view("admin.index");
+        else return view("admin.login");
+    }
+    public function dashboard()
+    {
         $recipes_count = Recipe::count();
         $articles_count = Article::count();
         $data = [
@@ -26,5 +35,19 @@ class AdminController extends Controller
             "top_rated_recipes" => DB::table("rating")->join("recipes", "recipe_id", "=", "recipes.id")->selectRaw('recipes.id, title, slug, recipe_id, avg(rating.value) as rating_avg')->groupByRaw("recipes.id, title, slug, recipe_id")->orderByDesc("rating_avg")->take(5)->get(), //
         ];
         return response()->json($data);
+    }
+
+    public function login(Request $request) {
+        $request->validate([
+            "email" => ["required", "email"],
+            "password" => ["required"],
+        ]);
+        if (auth("admin")->attempt(["email" => $request->input("email"), "password" => $request->input("password")], $request->input("remember"))) return response()->redirectToRoute("admin");
+        else return back()->withErrors(["error" => "Username or password is not correct !"])->withInput();
+    }
+
+    public function logout(Request $request) {
+        auth("admin")->logout();
+        return response()->redirectToRoute("admin");
     }
 }

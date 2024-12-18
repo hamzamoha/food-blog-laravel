@@ -14,7 +14,7 @@
     <div class="max-w-6xl mt-10 mx-auto flex flex-wrap">
         <main class="bg-white pb-10 w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             @foreach ($categories as $category)
-                <a href="{{ route($category->for . '.index_category', ['category' => $category->slug]) }}" class="block group relative overflow-hidden rounded-lg">
+                <a href="{{ route($category->for . '.index_category', ['category' => $category->slug], false) }}" class="block group relative overflow-hidden rounded-lg">
                     <img class="absolute inset-0 w-full h-full object-cover" src="{{ $category->image_url }}"
                         alt="{{ $category->label }}">
                     <div

@@ -51,7 +51,7 @@
                 <div class="text-7xl text-amber-200 py-5">
                     <span class="font-medium">Login</span>
                 </div>
-                <form action="{{ route('auth.login') }}" method="POST" autocomplete="off">
+                <form action="{{ route('auth.login', [], false) }}" method="POST" autocomplete="off">
                     @csrf
                     <div class="relative bg-gray-100 my-6">
                         <input placeholder=""
@@ -96,7 +96,7 @@
                 <div class="text-7xl text-amber-200 py-5">
                     <span class="font-medium">Register</span>
                 </div>
-                <form action="{{ route('auth.register') }}" method="POST" autocomplete="off">
+                <form action="{{ route('auth.register', [], false) }}" method="POST" autocomplete="off">
                     @csrf
                     <div class="grid grid-cols-2 gap-6 my-6">
                         <div class="relative bg-gray-100">

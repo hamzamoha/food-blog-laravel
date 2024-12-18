@@ -91,7 +91,7 @@
             <div class="mb-4 mt-20 pt-20 relative">
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full">
                     <form id="user_photo_form" enctype="multipart/form-data" method="POST" autocomplete="off"
-                        action="{{ route('auth.profile') }}">
+                        action="{{ route('auth.profile', [], false) }}">
                         @csrf
                         @if (auth()->user()->photo_url && \Illuminate\Support\Facades\Storage::exists(auth()->user()->photo_url))
                             <img onerror="this.classList.add('hidden')"
@@ -121,7 +121,7 @@
                     </form>
                 </div>
                 <div class="grid sm:grid-cols-2">
-                    <form method="POST" autocomplete="off" action="{{ route('auth.profile') }}" class="p-2">
+                    <form method="POST" autocomplete="off" action="{{ route('auth.profile', [], false) }}" class="p-2">
                         @csrf
                         <h2 class="py-1 text-2xl text-center">Your Informations</h2>
                         <input value="{{ auth()->user()->firstname }}"
@@ -139,7 +139,7 @@
                         <button type="submit"
                             class="py-2 px-5 bg-teal-400 hover:bg-teal-300 my-1 mx-auto block w-fit rounded">Save</button>
                     </form>
-                    <form method="POST" autocomplete="off" action="{{ route('auth.profile') }}" class="p-2">
+                    <form method="POST" autocomplete="off" action="{{ route('auth.profile', [], false) }}" class="p-2">
                         @csrf
                         <h2 class="py-1 text-2xl text-center">Your Password</h2>
                         <input

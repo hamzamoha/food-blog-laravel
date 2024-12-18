@@ -12,6 +12,9 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\File;
 use Intervention\Image\Facades\Image;
+use Throwable;
+
+use function PHPUnit\Framework\returnSelf;
 
 class UserController extends Controller
 {
@@ -63,25 +66,33 @@ class UserController extends Controller
     }
     public function index()
     {
-        return response()->json(
-            DB::table('users')
-                ->crossJoinSub(function ($query) {
-                    $query->from('saved')
-                        ->select('user_id', DB::raw("count(*) as recipes_count"))
-                        ->where('savable_table', '=', 'recipes')
-                        ->groupBy('user_id');
-                }, 't2')
-                ->crossJoinSub(function ($query) {
-                    $query->from('saved')
-                        ->select('user_id', DB::raw("count(*) as articles_count"))
-                        ->where('savable_table', '=', 'articles')
-                        ->groupBy('user_id');
-                }, 't3')
-                ->select('*')
-                ->where('users.id', '=', DB::raw('t2.user_id'))
-                ->where('users.id', '=', DB::raw('t3.user_id'))
-                ->get()
-        );
+        try {
+            return response()->json(
+                DB::table('users')
+                    ->leftJoin('saved as r', function ($join) {
+                        $join->on('users.id', '=', 'r.user_id')
+                            ->where('r.savable_table', '=', 'recipes');
+                    })
+                    ->leftJoin('saved as a', function ($join) {
+                        $join->on('users.id', '=', 'a.user_id')
+                            ->where('a.savable_table', '=', 'articles');
+                    })
+                    ->select(
+                        'users.firstname',
+                        'users.lastname',
+                        'users.username',
+                        'users.email',
+                        'users.photo_url',
+                        'users.created_at',
+                        DB::raw('COUNT(r.id) as recipes_count'),
+                        DB::raw('COUNT(a.id) as articles_count')
+                    )
+                    ->groupBy('users.firstname', 'users.lastname', 'users.username', 'users.email', 'users.photo_url', 'users.created_at')
+                    ->get()
+            );
+        } catch (Throwable $th) {
+            return response()->json($th);
+        }
     }
     private function compress($source_image)
     {

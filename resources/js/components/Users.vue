@@ -32,7 +32,7 @@
                 <td class="px-4 py-3">
                     <div class="flex items-center">
                         <div class="relative w-8 h-8 mr-3 rounded-full">
-                            <img class="object-cover w-full h-full rounded-full" :src="user.photo_url" />
+                            <img class="object-cover w-full h-full rounded-full" :src="user.photo_url ? user.photo_url : 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&dpr=1&fit=crop&h=200&w=200'" />
                         </div>
                         <div>
                             <p class="font-semibold">{{ user.firstname }}</p>

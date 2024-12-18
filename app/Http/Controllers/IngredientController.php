@@ -43,7 +43,7 @@ class IngredientController extends Controller
             "image_url" => "",
             "category" => strtolower(Str::squish($request->input("category"))),
         ]);
-        $ingredient->image_url = '/uploads/ingredient-' .  Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension();
+        $ingredient->image_url = '/uploads/ingredients/' .  Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension();
         $new_image = Image::make($image->getRealPath());
         if ($new_image->width() > $new_image->height()) {
             $new_image->resize(null, 400, function ($constraint) {

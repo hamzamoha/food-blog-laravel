@@ -21,7 +21,11 @@
                 <span class="text-lg font-semibold">Admin Panel</span>
             </div>
             <ul class="ml-auto mr-5">
-                <li><a class="text-white block py-4 px-4" href="/">Logout</a></li>
+                <li>
+                    <form action="{{ route('admin.logout', [], false) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="text-white block py-4 px-4">Logout</button>
+                    </form>
             </ul>
         </nav>
     </div>

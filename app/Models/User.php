@@ -49,12 +49,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function savedRecipesCount() : Attribute {
+    public function savedRecipesCount(): Attribute
+    {
         return Attribute::make(
-            get: fn () => DB::table("saved")
-            ->where("user_id", "=", $this->id)
-            ->where("savable_table", "=", "recipes")
-            ->count(),
+            get: fn() => DB::table("saved")
+                ->where("user_id", "=", $this->id)
+                ->where("savable_table", "=", "recipes")
+                ->count(),
         );
     }
 }
