@@ -26,12 +26,13 @@ class SaverController extends Controller
                 DB::table("saved")->insert([
                     "savable_table" => $request->input("table"),
                     "savable_id" => $request->input("id"),
+                    "saved_at" => date('Y-m-d'),
                     "user_id" => auth()->user()->id
                 ]);
                 $saved = "saved";
             }
             return response()->json([
-                "saved" => "$saved"
+                "saved" => $saved
             ]);
         }
         return response()->json([
@@ -74,16 +75,18 @@ class SaverController extends Controller
                 ->avg('value');
         } else return -1;
     }
-    private static function isRatedByUser($recipe_id) : bool {
+    private static function isRatedByUser($recipe_id): bool
+    {
         return DB::table("rating")->where([
             'recipe_id' => $recipe_id,
             'user_id' => auth()->user()->id
         ])->exists();
     }
-    public static function getRatingByUser($recipe_id) : int {
-        return self::isRatedByUser($recipe_id)?DB::table("rating")->where([
+    public static function getRatingByUser($recipe_id): int
+    {
+        return self::isRatedByUser($recipe_id) ? DB::table("rating")->where([
             'recipe_id' => $recipe_id,
             'user_id' => auth()->user()->id
-        ])->first()->value:-1;
+        ])->first()->value : -1;
     }
 }

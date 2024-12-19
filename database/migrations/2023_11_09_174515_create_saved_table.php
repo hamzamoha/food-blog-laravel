@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('savable_table');
             $table->unsignedBigInteger("savable_id")->nullable();
             $table->unsignedBigInteger("user_id")->default(0);
-            $table->date("saved_at")->default(DB::raw('CURRENT_DATE'));
+            $table->date("saved_at")->nullable();
         });
     }
 
