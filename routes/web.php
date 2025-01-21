@@ -68,9 +68,9 @@ Route::controller(MainController::class)->group(function () {
 });
 
 
-Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
-Route::get('/admin', [AdminController::class, 'index'])->name('admin');
-Route::post('/admin', [AdminController::class, 'login']);
+Route::post('/f_admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+Route::get('/f_admin', [AdminController::class, 'index'])->name('admin');
+Route::post('/f_admin', [AdminController::class, 'login']);
 
 Route::get('/uploads/{url}', [StorageController::class, 'uploads']);
 Route::get('/ckeditor/{url}', [StorageController::class, 'ckeditor']);

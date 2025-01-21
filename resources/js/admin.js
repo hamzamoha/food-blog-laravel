@@ -14,6 +14,7 @@ import AddRecipe from './components/AddRecipe.vue';
 import Users from './components/Users.vue';
 import RecipesCategories from './components/categories/RecipesCategories.vue';
 import ArticlesCategories from './components/categories/ArticlesCategories.vue';
+import EditRecipe from './components/EditRecipe.vue';
 
 
 const router = createRouter({
@@ -58,6 +59,10 @@ const router = createRouter({
             path: '/recipes/create',
             alias: '/recipes/create/*',
             component: AddRecipe
+        },
+        {
+            path: '/recipes/edit/:id',
+            component: EditRecipe
         },
         {
             path: '/articles',

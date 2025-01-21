@@ -137,7 +137,14 @@
 		<div class="w-2/3 pr-5">
 			<main class="bg-white pb-10">
 				<div class="text-center">
-					<span>@foreach ($recipe->categories as $key => $category) <a class="text-sm font-bold uppercase text-blue-400" href="{{ route("recipes.index_category", ["category" => $category->slug], false) }}">{{ $category->label }}</a>@if ($key < count($recipe->categories) - 1)<span>&nbsp;|&nbsp;</span>@endif @endforeach</span>
+					<span>
+						@foreach ($recipe->categories as $key => $category)
+							<a class="text-sm font-bold uppercase text-blue-400" href="{{ route("recipes.index_category", ["category" => $category->slug], false) }}">{{ $category->label }}</a>
+							@if ($key < count($recipe->categories) - 1)
+								<span>&nbsp;|&nbsp;</span>
+							@endif
+						@endforeach
+					</span>
 				</div>
 				<h1 class="py-2 text-center text-4xl font-extralight">{{ $recipe->title }}</h1>
 				<p class="py-2 text-center font-light text-neutral-500">Published on {{ date("F d, Y", strtotime($recipe->created_at)) }}&nbsp;&bull;&nbsp;Updated on {{ date("F d, Y", strtotime($recipe->updated_at)) }}</p>
@@ -181,20 +188,30 @@
 				</section>
 				<div class="py-3">
 					<span class="font-semibold">Tags:</span>
-					@foreach ($recipe->tags as $tag)
-						<a class="rounded bg-neutral-200 px-1 hover:bg-neutral-300" href="{{ route("recipes.index_tag", ["tag" => $tag], false) }}">{{ \Illuminate\Support\Str::title($tag) }}</a>
-					@endforeach
+					@if ($recipe->tags)
+						@foreach ($recipe->tags as $tag)
+							<a class="rounded bg-neutral-200 px-1 hover:bg-neutral-300" href="{{ route("recipes.index_tag", ["tag" => $tag], false) }}">{{ \Illuminate\Support\Str::title($tag) }}</a>
+						@endforeach
+					@endif
 				</div>
 				<section class="py-6">
 					<h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!</h4>
 					<div class="flex flex-wrap items-center py-2">
-						<div class="m-1"><div class="fb-share-button" data-href="https://www.allrecipes.com/article/cup-to-gram-conversions/" data-layout="button_count" data-size="large"></div></div>
-						<div class="m-1"><div class="fb-save" data-uri="http://www.your-domain.com/your-page.html" data-size="large"></div></div>
+						<div class="m-1">
+							<div class="fb-share-button" data-href="https://www.allrecipes.com/article/cup-to-gram-conversions/" data-layout="button_count" data-size="large"></div>
+						</div>
+						<div class="m-1">
+							<div class="fb-save" data-uri="http://www.your-domain.com/your-page.html" data-size="large"></div>
+						</div>
 						<div class="m-1"><a class="twitter-share-button" data-size="large" href="https://twitter.com/intent/tweet?text={{ \Illuminate\Support\Str::title($recipe->title) }}&via=Allrecipes&url={{ $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] }}">Tweet</a></div>
 						<div class="m-1"><a class="block rounded-full bg-green-500 px-2.5 py-0.5 text-white hover:bg-green-600" target="_blank" href="https://wa.me/?text=Awesome%20Blog!%5Cn%20blog.shahednasser.com" data-action="share/whatsapp/share"><i class="fa-brands fa-whatsapp"></i> Share</a></div>
 						<div class="m-1"><a href="https://www.pinterest.com/pin/create/button/" data-pin-tall="true" data-pin-do="buttonPin" media="{{ $recipe->image_url }}" description="{{ $recipe->title }}"></a></div>
-						<div class="m-1"><div class="snapchat-creative-kit-share" data-size="large"></div></div>
-						<div class="m-1"><script type="IN/Share" data-url="{{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}"></script></div>
+						<div class="m-1">
+							<div class="snapchat-creative-kit-share" data-size="large"></div>
+						</div>
+						<div class="m-1">
+							<script type="IN/Share" data-url="{{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}"></script>
+						</div>
 					</div>
 				</section>
 				<section class="my-5 bg-neutral-100 p-3">
