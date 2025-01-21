@@ -2,33 +2,36 @@
     <div class="bg-neutral-100 p-0 animate-push">
         <form action="/api/recipes" method="POST" autocomplete="off" enctype="multipart/form-data">
             <input type="hidden" name="_token" :value="csrf_token">
-            <h1 class="text-3xl font-semibold bg-white p-3">Create New Recipe</h1>
-            <p class="text-sm text-neutral-700 bg-white px-3 pb-3">Craft a Fresh, Innovative Recipe.</p>
-            <div class="grid md:grid-cols-3 gap-3 mt-3">
+            <input type="hidden" name="_method" value="PUT">
+            <h1 class="text-3xl font-semibold bg-white p-3">Edit Recipe</h1>
+            <div class="grid md:grid-cols-3 gap-3 mt-3" v-if="recipe">
                 <div class="col-span-2 p-3 bg-white">
                     <table class="w-full">
                         <tbody>
                             <tr class="border-b">
                                 <td class="w-[1%] py-2 px-4 align-top">Image</td>
                                 <td class="py-2 px-4">
-                                    <div class="flex items-center justify-center w-full">
-                                        <label for="image" @drop="drop($event)" @dragover="$event.preventDefault()" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                                <div v-if="imagePreview" class="py-2 text-center">
-                                                    <img :src="imagePreview" alt="Image Preview" class="h-60">
+                                    <div class="grid grid-cols-2">
+                                        <div v-if="recipe.image_url && recipe.image_url != ''" class="">
+                                            <img :src="recipe.image_url" alt="">
+                                        </div>
+                                        <div :class="'flex items-center justify-center w-full' + (recipe.image_url && recipe.image_url != '' ? '' : ' col-span-2')">
+                                            <label for="image" @drop="drop($event)" @dragover="$event.preventDefault()" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                    <div v-if="imagePreview" class="py-2 text-center">
+                                                        <img :src="imagePreview" alt="Image Preview" class="h-60">
+                                                    </div>
+                                                    <div v-else id="previewImagePlaceholder">
+                                                        <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                        </svg>
+                                                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                                        <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
+                                                    </div>
                                                 </div>
-                                                <div v-else id="previewImagePlaceholder">
-                                                    <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                    </svg>
-                                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click
-                                                            to
-                                                            upload</span> or drag and drop</p>
-                                                    <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
-                                                </div>
-                                            </div>
-                                            <input id="image" name="image" type="file" class="hidden" @change="imageSelected($event)" />
-                                        </label>
+                                                <input id="image" name="image" type="file" class="hidden" @change="imageSelected($event)" />
+                                            </label>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -36,7 +39,7 @@
                                 <td class="w-[1%] py-2 px-4">Title</td>
                                 <td class="py-2 px-4">
                                     <div class="relative">
-                                        <input name="title" type="text" class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
+                                        <input name="title" type="text" class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none" :value="recipe.title">
                                     </div>
                                 </td>
                             </tr>
@@ -44,7 +47,7 @@
                                 <td class="w-[1%] py-2 px-4">Description</td>
                                 <td class="py-2 px-4">
                                     <div class="relative">
-                                        <input name="description" type="text" class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
+                                        <input name="description" type="text" class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none" :value="recipe.description">
                                     </div>
                                 </td>
                             </tr>
@@ -65,8 +68,7 @@
                                     <input type="hidden" name="cooking_method" :value="recipe_cookingMethods.join(',')">
                                     <div class="mb-2 mr-2 relative" v-for="(item, index) in cookingMethods" :key="index">
                                         <input :id="'cookingMethod' + index" :value="item" :checked="recipe_cookingMethods.includes(item)" class="peer absolute w-0 h-0 opacity-0 invisible" type="checkbox">
-                                        <label @click="recipe_cookingMethods.includes(item) ? recipe_cookingMethods = recipe_cookingMethods.filter(id => id !== item) : recipe_cookingMethods.push(item)" class="py-1 px-3 rounded bg-neutral-200 block cursor-pointer transition-all hover:scale-95 peer-checked:bg-amber-400">{{
-                                            item }}</label>
+                                        <label @click="recipe_cookingMethods.includes(item) ? recipe_cookingMethods = recipe_cookingMethods.filter(id => id !== item) : recipe_cookingMethods.push(item)" class="py-1 px-3 rounded bg-neutral-200 block cursor-pointer transition-all hover:scale-95 peer-checked:bg-amber-400">{{ item }}</label>
                                     </div>
                                 </td>
                             </tr>
@@ -83,6 +85,9 @@
                                 <td class="w-[1%] py-5 px-4 align-top">Instructions</td>
                                 <td class="py-5 px-4">
                                     <div class="relative">
+                                        <div class="" v-for="(instruction, index) in recipe.instructions" :key="index">
+                                            <p><b>{{ index + 1 }}:</b> {{ instruction.content }}</p>
+                                        </div>
                                         <div class="relative py-1">
                                             <div v-for="(instruction, index) in instructions" :key="index" class="pl-10 my-2 relative">
                                                 <span class="absolute top-0 left-0 h-10 w-10 leading-10 text-center">{{ index + 1 }}</span>
@@ -100,18 +105,17 @@
                     <div class="py-2">Difficulty</div>
                     <div class="px-4">
                         <div class="flex flex-wrap py-4">
-                            <input :class="['accent-green-500', 'accent-amber-500', 'accent-red-500'][recipe_difficulty]" type="range" min="0" max="2" v-model="recipe_difficulty"><span class="ml-2">{{ ['Easy',
-                                'Medium', 'Hard'][recipe_difficulty] }}</span>
+                            <input :class="['accent-green-500', 'accent-amber-500', 'accent-red-500'][recipe_difficulty]" type="range" min="0" max="2" v-model="recipe_difficulty"><span class="ml-2">{{ ['Easy', 'Medium', 'Hard'][recipe_difficulty] }}</span>
                             <input type="hidden" name="difficulty_level" :value="['easy', 'medium', 'hard'][recipe_difficulty]">
                         </div>
                     </div>
                     <div class="py-2">Cooking Time (in Minutes)</div>
                     <div class="px-4">
-                        <input name="cooking_time" class="w-full p-2 border border-neutral-400" type="number" min="0">
+                        <input name="cooking_time" class="w-full p-2 border border-neutral-400" type="number" min="0" :value="recipe.cooking_time">
                     </div>
                     <div class="py-2">Serving Size</div>
                     <div class="px-4">
-                        <input name="serving_size" class="w-full p-2 border border-neutral-400" type="number" min="0">
+                        <input name="serving_size" class="w-full p-2 border border-neutral-400" type="number" min="0" :value="recipe.serving_size">
                     </div>
                     <div class="py-2">Tags</div>
                     <div class="px-4">
@@ -176,11 +180,10 @@ watchdog.setCreator((element, config) => {
 watchdog.setDestructor(editor => {
     return editor.destroy();
 });
-watchdog.on('error', (e) => {});
+watchdog.on('error', (e) => { });
 import SimpleUploadAdapterPlugin from "../ckeditor-upload-adapter"
 export default {
     name: "EditRecipe",
-    props: ['id'],
     data() {
         return {
             recipe: null,
@@ -190,7 +193,7 @@ export default {
             addIngredient: false,
             ingredients: {},
             recipe_categories: [],
-            recipe_cookingMethods: ['Bake', 'Sauté'],
+            recipe_cookingMethods: [],
             search_query: "",
             recipe_difficulty: 1,
             cookingMethods: ['Bake', 'Boil', 'Braise', 'Broil', 'Fry', 'Grill', 'Roast', 'Poach', 'Sauté', 'Steam', 'Stir-Fry', 'Simmer'],
@@ -202,7 +205,13 @@ export default {
     },
     methods: {
         fetchRecipe() {
-            fetch("/api/recipes/" + this.id).then(r=>r.json()).then(r => this.recipe = r)
+            fetch("/api/recipes/" + this.$route.params.id).then(r => r.json()).then(r => this.recipe = r)
+                .then(() => this.recipe_ingredients = this.recipe.ingredients)
+                .then(() => this.recipe_cookingMethods = this.recipe.cooking_method.split(','))
+                .then(() => this.recipe_tags = this.recipe.tags)
+                .then(() => this.recipe_categories = this.recipe.categories)
+                .then(() => this.recipe_difficulty = ['easy', 'medium', 'hard'].indexOf(this.recipe.difficulty_level.toLowerCase()))
+                .finally(() => {this.initEditor()})
         },
         fetchIngredients() {
             fetch("/api/ingredients")
@@ -211,10 +220,9 @@ export default {
                     res.forEach(element => { this.ingredients[element.category] = [...(this.ingredients[element.category] ? this.ingredients[element.category] : []), element] });
                     return res;
                 })
-                .then((res) => (this.recipe_ingredients = res.filter(i => ["salt", "onions", "garlic", "olive oil", "pepper"].includes(i.name.toLowerCase()))))
         },
         fetchCategories() {
-            fetch("/api/recipes/categories")
+            fetch("/api/recipes_categories")
                 .then(res => res.json())
                 .then(res => (this.categories = res));
         },
@@ -260,21 +268,23 @@ export default {
                 input.dispatchEvent(new Event("change"));
             }
         },
-    },
-    mounted() {
-        this.fetchIngredients()
-        this.fetchCategories()
-        watchdog
-            .create(document.querySelector('.editor'), {
-                initialData: "I am an initial text",
+        initEditor() {
+            watchdog.create(document.querySelector('.editor'), {
+                initialData: this.recipe.content,
                 extraPlugins: [SimpleUploadAdapterPlugin],
             })
-            .then(() => {
-                watchdog.editor.model.document.on('change:data', () => {
-                    this.content = watchdog.editor.getData();
-                });
-            })
-            .catch((error) => { });
+                .then(() => {
+                    watchdog.editor.model.document.on('change:data', () => {
+                        this.content = watchdog.editor.getData();
+                    });
+                })
+                .catch((e) => { });
+        }
+    },
+    mounted() {
+        this.fetchRecipe()
+        this.fetchIngredients()
+        this.fetchCategories()
     },
 }
 </script>

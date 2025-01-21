@@ -29,7 +29,7 @@
                     <td class="px-3 py-2">341<i class="ml-1 fa-regular fa-eye"></i></td>
                     <td class="px-3 py-1">
                         <router-link :to="'/recipes/edit/' + recipe.id" class="bg-neutral-200 rounded py-1 px-2 hover:bg-neutral-300 text-neutral-700"><i class="fa-solid fa-pen"></i></router-link>
-                        <button class="bg-neutral-200 rounded py-1 px-2 hover:bg-neutral-300 text-neutral-700"><i class="fa-solid fa-trash"></i></button>
+                        <button @click="destroy(recipe.id)" class="bg-neutral-200 rounded py-1 px-2 hover:bg-neutral-300 text-neutral-700"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -57,6 +57,15 @@ export default {
         this.fetchRecipes();
     },
     methods: {
+        destroy(id) {
+            const fd = new FormData()
+            fd.append("_method", "delete")
+            fd.append("_token", document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+            fetch("/api/recipes/" + id, {
+                method: "POST",
+                body: fd
+            }).then(() => this.$router.go())
+        },
         fetchRecipes() {
             fetch("/api/recipes")
                 .then(res => res.json())

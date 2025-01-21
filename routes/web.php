@@ -78,16 +78,19 @@ Route::get('/ckeditor/{url}', [StorageController::class, 'ckeditor']);
 Route::prefix('api')->middleware("auth:admin")->group(function () {
     Route::prefix('recipes')->group(function () {
         Route::controller(RecipeController::class)->group(function () {
+            Route::delete('/{id}', 'destroy');
+            Route::get('/{id}', 'get');
+            Route::put('/{id}', 'update');
             Route::get('/', 'index_api')->name("index");
             Route::post('/', 'store');
         });
-        Route::prefix("categories")->controller(CategoryController::class)->group(function () {
-            Route::get('/', '_index')->name("index");
-            Route::post('/', '_store');
-            Route::put('/{id}', 'update');
-            Route::delete('/{id}', '_destroy');
-        })->name("categories.");
     })->name("recipes.");
+    Route::prefix("recipes_categories")->controller(CategoryController::class)->group(function () {
+        Route::get('/', '_index')->name("index");
+        Route::post('/', '_store');
+        Route::put('/{id}', 'update');
+        Route::delete('/{id}', '_destroy');
+    })->name("categories.");
     Route::prefix("ingredients")->controller(IngredientController::class)->group(function () {
         Route::get('/', 'index')->name("index");
         Route::post('/', 'store');

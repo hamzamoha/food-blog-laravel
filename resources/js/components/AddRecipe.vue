@@ -12,27 +12,18 @@
                                 <td class="w-[1%] py-2 px-4 align-top">Image</td>
                                 <td class="py-2 px-4">
                                     <div class="flex items-center justify-center w-full">
-                                        <label for="image" @drop="drop($event)" @dragover="$event.preventDefault()"
-                                            class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                        <label for="image" @drop="drop($event)" @dragover="$event.preventDefault()" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                                 <div v-if="imagePreview" class="py-2 text-center">
                                                     <img :src="imagePreview" alt="Image Preview" class="h-60">
                                                 </div>
                                                 <div v-else id="previewImagePlaceholder">
-                                                    <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true"
-                                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                                        <path stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="2"
-                                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                    </svg>
-                                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click
-                                                            to
-                                                            upload</span> or drag and drop</p>
+                                                    <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" /></svg>
+                                                    <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                                     <p class="text-xs text-gray-500">SVG, PNG, JPG or GIF</p>
                                                 </div>
                                             </div>
-                                            <input id="image" name="image" type="file" class="hidden"
-                                                @change="imageSelected($event)" />
+                                            <input id="image" name="image" type="file" class="hidden" @change="imageSelected($event)" />
                                         </label>
                                     </div>
                                 </td>
@@ -41,8 +32,7 @@
                                 <td class="w-[1%] py-2 px-4">Title</td>
                                 <td class="py-2 px-4">
                                     <div class="relative">
-                                        <input name="title" type="text"
-                                            class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
+                                        <input name="title" type="text" class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
                                     </div>
                                 </td>
                             </tr>
@@ -50,8 +40,7 @@
                                 <td class="w-[1%] py-2 px-4">Description</td>
                                 <td class="py-2 px-4">
                                     <div class="relative">
-                                        <input name="description" type="text"
-                                            class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
+                                        <input name="description" type="text" class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
                                     </div>
                                 </td>
                             </tr>
@@ -59,14 +48,10 @@
                                 <td class="w-[1%] py-2 px-4">Ingredients</td>
                                 <td class="py-2 px-4">
                                     <div class="flex flex-wrap">
-                                        <input name="ingredients" type="hidden"
-                                            :value="recipe_ingredients.reduce((r, e) => (r.push(e.id) ? r : []), [])">
-                                        <div v-for="(ingredient, index) in recipe_ingredients" :key="index"
-                                            class="w-20 h-20 p-2 bg-neutral-100 rounded border mr-2 mb-2 flex justify-center items-center text-center">
+                                        <input name="ingredients" type="hidden" :value="recipe_ingredients.reduce((r, e) => (r.push(e.id) ? r : []), [])">
+                                        <div v-for="(ingredient, index) in recipe_ingredients" :key="index" class="w-20 h-20 p-2 bg-neutral-100 rounded border mr-2 mb-2 flex justify-center items-center text-center">
                                             {{ ingredient.name }}</div>
-                                        <button type="button" @click="addIngredient = true"
-                                            class="w-20 h-20 bg-neutral-200 mr-2 mb-2 flex justify-center items-center cursor-pointer hover:bg-neutral-300"><i
-                                                class="fa-solid fa-plus fa-2xl"></i></button>
+                                        <button type="button" @click="addIngredient = true" class="w-20 h-20 bg-neutral-200 mr-2 mb-2 flex justify-center items-center cursor-pointer hover:bg-neutral-300"><i class="fa-solid fa-plus fa-2xl"></i></button>
                                     </div>
                                 </td>
                             </tr>
@@ -75,13 +60,9 @@
                                 <td class="py-5 px-4 flex flex-wrap">
                                     <input type="hidden" name="cooking_method" :value="recipe_cookingMethods.join(',')">
                                     <div class="mb-2 mr-2 relative" v-for="(item, index) in cookingMethods" :key="index">
-                                        <input :id="'cookingMethod' + index" :value="item"
-                                            :checked="recipe_cookingMethods.includes(item)"
-                                            class="peer absolute w-0 h-0 opacity-0 invisible" type="checkbox">
-                                        <label
-                                            @click="recipe_cookingMethods.includes(item) ? recipe_cookingMethods = recipe_cookingMethods.filter(id => id !== item) : recipe_cookingMethods.push(item)"
-                                            class="py-1 px-3 rounded bg-neutral-200 block cursor-pointer transition-all hover:scale-95 peer-checked:bg-amber-400">{{
-                                                item }}</label>
+                                        <input :id="'cookingMethod' + index" :value="item" :checked="recipe_cookingMethods.includes(item)" class="peer absolute w-0 h-0 opacity-0 invisible" type="checkbox">
+                                        <label @click="recipe_cookingMethods.includes(item) ? recipe_cookingMethods = recipe_cookingMethods.filter(id => id !== item) : recipe_cookingMethods.push(item)" class="py-1 px-3 rounded bg-neutral-200 block cursor-pointer transition-all hover:scale-95 peer-checked:bg-amber-400">{{
+                                            item }}</label>
                                     </div>
                                 </td>
                             </tr>
@@ -89,8 +70,7 @@
                                 <td class="w-[1%] py-5 px-4 align-top">Content</td>
                                 <td class="py-5 px-4">
                                     <div class="relative">
-                                        <textarea class="h-0 w-0 absolute overflow-hidden opacity-0 invisible"
-                                            v-model="content" name="content"></textarea>
+                                        <textarea class="h-0 w-0 absolute overflow-hidden opacity-0 invisible" v-model="content" name="content"></textarea>
                                         <div class="editor"></div>
                                     </div>
                                 </td>
@@ -102,10 +82,9 @@
                                         <div class="relative py-1">
                                             <div v-for="(instruction, index) in instructions" :key="index" class="pl-10 my-2 relative">
                                                 <span class="absolute top-0 left-0 h-10 w-10 leading-10 text-center">{{ index + 1 }}</span>
-                                                <input name="instructions[]" type="text" v-model="instruction.vlaue"
-                                                class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
+                                                <input name="instructions[]" type="text" v-model="instruction.vlaue" class="block p-2 bg-neutral-300 focus:bg-neutral-100 focus:shadow-[0_0_0_1px_#ddd] w-full h-10 outline-none">
                                             </div>
-                                            <button class="py-1 px-2 font-medium text-sm rounded bg-blue-300" type="button" @click="instructions.push({value: ''})">Add Instruction</button>
+                                            <button class="py-1 px-2 font-medium text-sm rounded bg-blue-300" type="button" @click="instructions.push({ value: '' })">Add Instruction</button>
                                         </div>
                                     </div>
                                 </td>
@@ -117,11 +96,9 @@
                     <div class="py-2">Difficulty</div>
                     <div class="px-4">
                         <div class="flex flex-wrap py-4">
-                            <input :class="['accent-green-500', 'accent-amber-500', 'accent-red-500'][recipe_difficulty]"
-                                type="range" min="0" max="2" v-model="recipe_difficulty"><span class="ml-2">{{ ['Easy',
-                                    'Medium', 'Hard'][recipe_difficulty] }}</span>
-                            <input type="hidden" name="difficulty_level"
-                                :value="['easy', 'medium', 'hard'][recipe_difficulty]">
+                            <input :class="['accent-green-500', 'accent-amber-500', 'accent-red-500'][recipe_difficulty]" type="range" min="0" max="2" v-model="recipe_difficulty"><span class="ml-2">{{ ['Easy',
+                                'Medium', 'Hard'][recipe_difficulty] }}</span>
+                            <input type="hidden" name="difficulty_level" :value="['easy', 'medium', 'hard'][recipe_difficulty]">
                         </div>
                     </div>
                     <div class="py-2">Cooking Time (in Minutes)</div>
@@ -136,10 +113,7 @@
                     <div class="px-4">
                         <div class="border inline-flex flex-wrap">
                             <input type="hidden" :value="recipe_tags.join(',')" name="tags">
-                            <span @click="recipe_tags.splice(index, 1)"
-                                class="m-1 text-sm font-medium p-1 rounded bg-neutral-100 border"
-                                v-for="(item, index) in recipe_tags" :key="index">{{ titleCase(item) }}<i
-                                    class="ml-1 fa-light fa-xmark"></i></span>
+                            <span @click="recipe_tags.splice(index, 1)" class="m-1 text-sm font-medium p-1 rounded bg-neutral-100 border" v-for="(item, index) in recipe_tags" :key="index">{{ titleCase(item) }}<i class="ml-1 fa-light fa-xmark"></i></span>
                             <input type="text" class="m-1 outline-none indent-[0]" @keydown="addTag($event)">
                         </div>
                     </div>
@@ -147,12 +121,8 @@
                     <div class="px-4 flex flex-wrap">
                         <input type="hidden" name="categories" :value="recipe_categories.join(',')">
                         <div class="mb-2 mr-2 relative" v-for="(item, index) in categories" :key="index">
-                            <input :id="'category' + index" :value="item.id" :checked="recipe_categories.includes(item.id)"
-                                class="peer absolute w-0 h-0 opacity-0 invisible" type="checkbox">
-                            <label
-                                @click="recipe_categories.includes(item.id) ? recipe_categories = recipe_categories.filter(id => id !== item.id) : recipe_categories.push(item.id)"
-                                :style="`--bg-image: url('/${item.image_url}');`"
-                                class="group select-none transition-[transform] hover:scale-95 cursor-pointer border-2 border-amber-400 peer-checked:border-green-400 overflow-hidden pl-20 pt-10 bg-cover rounded flex bg-[image:var(--bg-image)]">
+                            <input :id="'category' + index" :value="item.id" :checked="recipe_categories.includes(item.id)" class="peer absolute w-0 h-0 opacity-0 invisible" type="checkbox">
+                            <label @click="recipe_categories.includes(item.id) ? recipe_categories = recipe_categories.filter(id => id !== item.id) : recipe_categories.push(item.id)" :style="`--bg-image: url('/${item.image_url}');`" class="group select-none transition-[transform] hover:scale-95 cursor-pointer border-2 border-amber-400 peer-checked:border-green-400 overflow-hidden pl-20 pt-10 bg-cover rounded flex bg-[image:var(--bg-image)]">
                                 <span class="bg-amber-300 group-peer-checked:bg-green-400 p-1 text-sm font-semibold">{{
                                     item.label }}</span>
                             </label>
@@ -165,29 +135,23 @@
             </div>
         </form>
     </div>
-    <div v-if="addIngredient"
-        :class="'fixed pt-8 pb-4 top-0 left-0 w-full h-full transition-all animate-pop bg-black bg-opacity-20'">
+    <div v-if="addIngredient" :class="'fixed pt-8 pb-4 top-0 left-0 w-full h-full transition-all animate-pop bg-black bg-opacity-20'">
         <div class="bg-white p-6 border shadow-lg max-w-auto w-[600px] flex flex-col mx-auto rounded-lg max-h-full">
             <div class="pb-5">
                 <h2 class="text-center pb-2 text-3xl font-semibold">Add Ingredients</h2>
-                <input type="text" placeholder="Search ..." v-model="search_query"
-                    class="w-full bg-neutral-100 border h-10 p-2 outline-none rounded">
+                <input type="text" placeholder="Search ..." v-model="search_query" class="w-full bg-neutral-100 border h-10 p-2 outline-none rounded">
             </div>
             <div class="overflow-y-auto">
-                <div v-for="(elements, category) in Object.keys(ingredients).reduce((r, k) => { r[k] = ingredients[k].filter(i => (i.name.toLowerCase().includes(search_query))); return r }, {})"
-                    :key="category" class="border-b py-3">
+                <div v-for="(elements, category) in Object.keys(ingredients).reduce((r, k) => { r[k] = ingredients[k].filter(i => (i.name.toLowerCase().includes(search_query))); return r }, {})" :key="category" class="border-b py-3">
                     <h3 class="py-2 text-xl font-semibold">{{ titleCase(category) }}</h3>
                     <div class="flex flex-wrap">
-                        <div v-for="(ingredient, index) in elements" :key="index"
-                            :class="'w-20 h-20 p-2 rounded border mr-2 mb-2 flex justify-center text-center items-center cursor-pointer ' + (isSelected(ingredient) ? 'bg-emerald-100' : 'bg-neutral-200')"
-                            @click="select(ingredient)">
+                        <div v-for="(ingredient, index) in elements" :key="index" :class="'w-20 h-20 p-2 rounded border mr-2 mb-2 flex justify-center text-center items-center cursor-pointer ' + (isSelected(ingredient) ? 'bg-emerald-100' : 'bg-neutral-200')" @click="select(ingredient)">
                             {{ titleCase(ingredient.name) }}</div>
                     </div>
                 </div>
             </div>
             <div class="pt-5 text-center">
-                <button type="button" @click="search_query = ''; addIngredient = false"
-                    class="py-2 px-5 bg-sky-600 rounded text-white hover:bg-sky-700">Done</button>
+                <button type="button" @click="search_query = ''; addIngredient = false" class="py-2 px-5 bg-sky-600 rounded text-white hover:bg-sky-700">Done</button>
             </div>
         </div>
     </div>

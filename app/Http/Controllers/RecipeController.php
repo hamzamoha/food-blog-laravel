@@ -10,6 +10,7 @@ use HTMLPurifier_Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\File;
 
@@ -56,7 +57,7 @@ class RecipeController extends Controller
             while (Recipe::where('slug', "$slug-$count")->exists()) {
                 $count += 1;
             }
-            $slug = $slug - $count;
+            $slug = "$slug-$count";
         }
         $recipe = Recipe::create([
             "title" => Str::title($request->input("title", "")),
@@ -114,6 +115,20 @@ class RecipeController extends Controller
         return response()->redirectTo('/recipes');
     }
 
+    public function get($id)
+    {
+        if ($recipe = Recipe::find($id)) {
+            $recipe->categories = DB::table('recipes_categories')->where('recipe_id', $id)->select(['category_id'])->get()->map(function ($obj) {
+                return $obj->category_id;
+            });
+            $recipe->append('content');
+            $recipe->load(relations: ['ingredients', 'instructions']);
+
+            return response()->json($recipe);
+        }
+        return response()->json(null);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -127,14 +142,64 @@ class RecipeController extends Controller
      */
     public function update(Request $request, Recipe $recipe)
     {
+        $slug = Str::slug($request->input("title", ""));
+        if (Recipe::where('slug', $slug)->exists()) {
+            $count = 1;
+            while (Recipe::where('slug', "$slug-$count")->exists()) {
+                $count += 1;
+            }
+            $slug = "$slug-$count";
+        }
         //
+        DB::table("recipes_categories")->where("recipe_id", $recipe->id)->delete();
+        foreach (explode(",", $request->input("categories")) as $id) {
+            if (($category = Category::find($id)) && $category->for === "recipes")
+                DB::table("recipes_categories")->insert([
+                    "category_id" => $id,
+                    "recipe_id" => $recipe->id
+                ]);
+        }
+        DB::table("recipes_ingredients")->where("recipe_id", $recipe->id)->delete();
+        foreach (explode(",", $request->input("ingredients")) as $id) {
+            DB::table("recipes_ingredients")->insert([
+                "ingredient_id" => $id,
+                "recipe_id" => $recipe->id
+            ]);
+        }
+        DB::table("recipes_contents")->where("recipe_id", $recipe->id)->delete();
+        DB::table("recipes_contents")->insert([
+            "recipe_id" => $recipe->id,
+            "content" => (new HTMLPurifier(HTMLPurifier_Config::createDefault()))->purify($request->input("content"))
+        ]);
+        $instructions = request("instructions");
+        foreach ($instructions as $key => $instruction) {
+            Instruction::create([
+                "recipe_id" => $recipe->id,
+                "content" => $instruction,
+            ]);
+        }
+        if ($request->hasFile('image')) {
+            Storage::delete($recipe->image_url);
+            $recipe->image_url = "/" . $request->file('image')->storeAs("uploads", "recipe-" . $recipe->slug . "-" . $recipe->id . "." . $request->file('image')->getClientOriginalExtension());
+        }
+        $recipe->save();
+        return redirect("/admin")->withFragment("#/recipes");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Recipe $recipe)
+    public function destroy($id)
     {
-        //
+        $recipe = Recipe::find($id);
+        DB::table("recipes_ingredients")->where("recipe_id", $recipe->id)->delete();
+        DB::table("recipes_categories")->where("recipe_id", $recipe->id)->delete();
+        DB::table("recipes_contents")->where("recipe_id", $recipe->id)->delete();
+        DB::table("rating")->where("recipe_id", $recipe->id)->delete();
+        DB::table("comments")->where("commentable_id", $recipe->id)->where("commentable_type", "recipe")->delete();
+        DB::table("saved")->where("savable_id", $recipe->id)->where("savable_table", "recipes")->delete();
+        Storage::delete($recipe->image_url);
+        $recipe->instructions()->delete();
+        return response()->json(["success" => $recipe->delete()]);
     }
 }
