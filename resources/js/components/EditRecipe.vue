@@ -183,6 +183,7 @@ export default {
     props: ['id'],
     data() {
         return {
+            recipe: null,
             imagePreview: null,
             csrf_token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
             recipe_ingredients: [],

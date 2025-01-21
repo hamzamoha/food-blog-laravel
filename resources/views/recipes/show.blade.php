@@ -188,11 +188,6 @@
 				</section>
 				<div class="py-3">
 					<span class="font-semibold">Tags:</span>
-					@if ($recipe->tags)
-						@foreach ($recipe->tags as $tag)
-							<a class="rounded bg-neutral-200 px-1 hover:bg-neutral-300" href="{{ route("recipes.index_tag", ["tag" => $tag], false) }}">{{ \Illuminate\Support\Str::title($tag) }}</a>
-						@endforeach
-					@endif
 				</div>
 				<section class="py-6">
 					<h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!</h4>
