@@ -1,10 +1,10 @@
 <template>
     <div class="bg-neutral-100 p-0 animate-push">
-        <form action="/api/recipes" method="POST" autocomplete="off" enctype="multipart/form-data">
-            <input type="hidden" name="_token" :value="csrf_token">
+        <form :action="'/api/recipes/' + recipe.id" method="POST" autocomplete="off" enctype="multipart/form-data" v-if="recipe">
+            <input type="hidden" name="_token" :value="csrf_token"> 
             <input type="hidden" name="_method" value="PUT">
             <h1 class="text-3xl font-semibold bg-white p-3">Edit Recipe</h1>
-            <div class="grid md:grid-cols-3 gap-3 mt-3" v-if="recipe">
+            <div class="grid md:grid-cols-3 gap-3 mt-3">
                 <div class="col-span-2 p-3 bg-white">
                     <table class="w-full">
                         <tbody>

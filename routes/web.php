@@ -75,7 +75,12 @@ Route::post('/f_admin', [AdminController::class, 'login']);
 Route::get('/uploads/{url}', [StorageController::class, 'uploads']);
 Route::get('/ckeditor/{url}', [StorageController::class, 'ckeditor']);
 
+Route::post('/settings', [AdminController::class, 'settings']);
+
 Route::prefix('api')->middleware("auth:admin")->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/', [AdminController::class, 'get']);
+    });
     Route::prefix('recipes')->group(function () {
         Route::controller(RecipeController::class)->group(function () {
             Route::delete('/{id}', 'destroy');

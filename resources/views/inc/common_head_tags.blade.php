@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 @vite('resources/css/ckeditor-tailwind-reset.css')
 @vite('resources/css/app.css')
-<link rel="stylesheet" href="/fontawesome/css/all.css">
+<link rel="stylesheet" href="/fontawesome/css/all.min.css">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <meta property="og:url" content="{{ $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] }}" />
 <meta property="og:type" content="website" />

@@ -186,9 +186,14 @@
 						@endforeach
 					</ol>
 				</section>
-				<div class="py-3">
-					<span class="font-semibold">Tags:</span>
-				</div>
+				@if (count($recipe->tags) > 0)
+					<div class="py-3">
+						<span class="font-semibold">Tags:</span>
+						@foreach ($recipe->tags as $tag)
+							<a class="rounded bg-neutral-200 px-1 hover:bg-neutral-300" href="{{ route("recipes.index_tag", ["tag" => $tag], false) }}">{{ \Illuminate\Support\Str::title($tag) }}</a>
+						@endforeach
+					</div>
+				@endif
 				<section class="py-6">
 					<h4 class="py-1 text-2xl"><i class="fa-solid fa-share-nodes mr-2.5"></i>Tell your friends about it!</h4>
 					<div class="flex flex-wrap items-center py-2">

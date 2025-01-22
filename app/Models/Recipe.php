@@ -15,36 +15,44 @@ class Recipe extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        "title", "slug", "description", "cooking_time", "difficulty_level", "cooking_method", "serving_size", "tags", "image_url"
+        "title",
+        "slug",
+        "description",
+        "cooking_time",
+        "difficulty_level",
+        "cooking_method",
+        "serving_size",
+        "tags",
+        "image_url"
     ];
     protected function title(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Str::title($value),
+            get: fn(string $value) => Str::title($value),
         );
     }
     protected function tags(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => explode(",", strtolower($value)),
+            get: fn(string $value) => $value == "" ? [] : explode(",", strtolower($value)),
         );
     }
     protected function content(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => DB::table("recipes_contents")->where("recipe_id", $this->id)->first()->content,
+            get: fn($value) => DB::table("recipes_contents")->where("recipe_id", $this->id)->first()->content,
         );
     }
     protected function cookingMethod(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => implode(", ", array_map(fn ($x) => Str::title($x), explode(",", strtolower($value)))),
+            get: fn(string $value) => implode(", ", array_map(fn($x) => Str::title($x), explode(",", strtolower($value)))),
         );
     }
     protected function difficultyLevel(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => Str::title($value),
+            get: fn(string $value) => Str::title($value),
         );
     }
     public function categories(): BelongsToMany

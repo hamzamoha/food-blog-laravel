@@ -96,7 +96,7 @@ class RecipeController extends Controller
         }
         $recipe->image_url = "/" . $request->file('image')->storeAs("uploads", "recipe-" . $recipe->slug . "-" . $recipe->id . "." . $request->file('image')->getClientOriginalExtension());
         $recipe->save();
-        return redirect("/admin")->withFragment("#/recipes");
+        return redirect()->route("admin")->withFragment("#/recipes");
     }
 
     /**
@@ -140,8 +140,9 @@ class RecipeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Recipe $recipe)
+    public function update(Request $request, $id)
     {
+        $recipe = Recipe::find($id);
         $slug = Str::slug($request->input("title", ""));
         if (Recipe::where('slug', $slug)->exists()) {
             $count = 1;
@@ -150,7 +151,14 @@ class RecipeController extends Controller
             }
             $slug = "$slug-$count";
         }
-        //
+        $recipe->title = Str::title($request->input("title", ""));
+        $recipe->slug = $slug;
+        $recipe->description = trim($request->input("description", ""));
+        $recipe->cooking_time = intval($request->input("cooking_time", "15"));
+        $recipe->difficulty_level = Str::lower($request->input("difficulty_level", "medium"));
+        $recipe->cooking_method = Str::lower(trim($request->input("cooking_method", "")));
+        $recipe->serving_size = intval($request->input("serving_size", "1"));
+        $recipe->tags = Str::lower(trim($request->input("tags", "")));
         DB::table("recipes_categories")->where("recipe_id", $recipe->id)->delete();
         foreach (explode(",", $request->input("categories")) as $id) {
             if (($category = Category::find($id)) && $category->for === "recipes")
@@ -172,7 +180,7 @@ class RecipeController extends Controller
             "content" => (new HTMLPurifier(HTMLPurifier_Config::createDefault()))->purify($request->input("content"))
         ]);
         $instructions = request("instructions");
-        foreach ($instructions as $key => $instruction) {
+        if ($instructions) foreach ($instructions as $key => $instruction) {
             Instruction::create([
                 "recipe_id" => $recipe->id,
                 "content" => $instruction,
@@ -183,7 +191,7 @@ class RecipeController extends Controller
             $recipe->image_url = "/" . $request->file('image')->storeAs("uploads", "recipe-" . $recipe->slug . "-" . $recipe->id . "." . $request->file('image')->getClientOriginalExtension());
         }
         $recipe->save();
-        return redirect("/admin")->withFragment("#/recipes");
+        return redirect()->route("admin")->withFragment("#/recipes");
     }
 
     /**

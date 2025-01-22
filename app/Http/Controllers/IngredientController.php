@@ -64,7 +64,7 @@ class IngredientController extends Controller
         }
         $new_image->save(storage_path('app/uploads/small/ingredient-' .  Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension()));
         $ingredient->save();
-        return redirect("/admin")->withFragment("#/ingredients/");
+        return redirect()->route("admin")->withFragment("#/ingredients/");
     }
 
     /**
@@ -116,7 +116,7 @@ class IngredientController extends Controller
             $new_image->save(storage_path('app/uploads/small/ingredient-' .  Str::slug($ingredient->name) . "-" . $ingredient->id . "." . $image->getClientOriginalExtension()));
         }
         $ingredient->save();
-        return redirect("/admin")->withFragment("#/ingredients");
+        return redirect()->route("admin")->withFragment("#/ingredients");
     }
 
     /**
@@ -130,6 +130,6 @@ class IngredientController extends Controller
             Storage::delete(str_replace("/uploads/", "/uploads/small/", $ingredient->image_url));
             $ingredient->delete();
         }
-        return redirect("/admin")->withFragment("#/ingredients");
+        return redirect()->route("admin")->withFragment("#/ingredients");
     }
 }

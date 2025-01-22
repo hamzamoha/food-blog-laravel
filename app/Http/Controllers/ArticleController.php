@@ -70,7 +70,7 @@ class ArticleController extends Controller
         }
         $article->image_url = "/" . $request->file('image')->storeAs("uploads", "article-" . $article->slug . "-" . $article->id . "." . $request->file('image')->getClientOriginalExtension());
         $article->save();
-        return redirect("/admin")->withFragment("#/articles");
+        return redirect()->route("admin")->withFragment("#/articles");
     }
 
     /**

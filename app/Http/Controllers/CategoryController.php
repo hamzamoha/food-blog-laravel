@@ -53,7 +53,7 @@ class CategoryController extends Controller
         ]);
         $category->image_url = "/" . $image->storeAs("uploads", "category-$for-" . $category->slug . "-" . $category->id . "." . $image->getClientOriginalExtension());
         $category->save();
-        return redirect("/admin")->withFragment("#/categories/" . $for);
+        return redirect()->route("admin")->withFragment("#/categories/" . $for);
     }
     public function _store(Request $request)
     {
@@ -94,7 +94,7 @@ class CategoryController extends Controller
             $category->image_url = "/" . $image->storeAs("uploads", "category-" . $category->for . "-" . $category->slug . "-" . $category->id . "." . $image->getClientOriginalExtension());
         }
         $category->save();
-        return redirect("/admin")->withFragment("#/categories/" . $category->for);
+        return redirect()->route("admin")->withFragment("#/categories/" . $category->for);
     }
 
     /**
@@ -107,7 +107,7 @@ class CategoryController extends Controller
             Storage::delete($category->image_url);
             $category->delete();
         }
-        return redirect("/admin")->withFragment("#/categories/" . $for);
+        return redirect()->route("admin")->withFragment("#/categories/" . $for);
     }
     public function destroy_(int $id)
     {

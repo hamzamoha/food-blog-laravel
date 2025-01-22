@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Recipe;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
+use Throwable;
 
 class AdminController extends Controller
 {
     public function __construct()
     {
         // Apply middleware only to specific methods
-        $this->middleware('auth:admin')->only(['dashboard']);
+        $this->middleware('auth:admin')->only(['dashboard', 'get']);
     }
     public function index()
     {
@@ -37,7 +42,8 @@ class AdminController extends Controller
         return response()->json($data);
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $request->validate([
             "email" => ["required", "email"],
             "password" => ["required"],
@@ -45,8 +51,38 @@ class AdminController extends Controller
         if (auth("admin")->attempt(["email" => $request->input("email"), "password" => $request->input("password")], $request->input("remember"))) return response()->redirectToRoute("admin");
         else return back()->withErrors(["error" => "Username or password is not correct !"])->withInput();
     }
-
-    public function logout(Request $request) {
+    public function get()
+    {
+        return response()->json(auth("admin")->user());
+    }
+    public function settings()
+    {
+        try {
+            $admin = auth("admin")->user();
+            if (request()->has('name')) {
+                $admin->name = Str::title(preg_replace("!s+!", " ", trim(request()->input('name'), " ")));
+            }
+            if (request()->has('email')) {
+                request()->validate(["email" => "email"]);
+                $admin->email = strtolower(trim(request()->input('email'), " "));
+            }
+            if (request()->has('old_password')) {
+                request()->validate([
+                    "old_password" => ["required"],
+                    "new_password" => ["required", "confirmed", Password::min(6)],
+                ]);
+                if (Hash::check(request()->input("old_password"), $admin->password))
+                    $admin->password = Hash::make(request()->input("new_password"));
+                else throw new Exception("Password Incorrect");
+            }
+            $admin->save();
+            return response()->json(["success" => true, "admin" => $admin]);
+        } catch (Throwable $e) {
+            return response()->json(["success" => false, "error" => $e->getMessage()]);
+        }
+    }
+    public function logout(Request $request)
+    {
         auth("admin")->logout();
         return response()->redirectToRoute("admin");
     }
