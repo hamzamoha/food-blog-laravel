@@ -14,8 +14,6 @@ use Illuminate\Validation\Rules\File;
 use Intervention\Image\Facades\Image;
 use Throwable;
 
-use function PHPUnit\Framework\returnSelf;
-
 class UserController extends Controller
 {
     public function postLogin(Request $request)

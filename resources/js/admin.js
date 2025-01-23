@@ -16,6 +16,7 @@ import RecipesCategories from './components/categories/RecipesCategories.vue';
 import ArticlesCategories from './components/categories/ArticlesCategories.vue';
 import EditRecipe from './components/EditRecipe.vue';
 import Settings from './components/Settings.vue';
+import EditArticle from './components/EditArticle.vue';
 
 
 const router = createRouter({
@@ -74,6 +75,10 @@ const router = createRouter({
             path: '/articles/create',
             alias: '/articles/create/*',
             component: AddArticle
+        },
+        {
+            path: '/articles/edit/:id',
+            component: EditArticle
         },
         {
             path: '/settings',

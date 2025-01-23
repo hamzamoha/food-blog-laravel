@@ -144,7 +144,7 @@ class RecipeController extends Controller
     {
         $recipe = Recipe::find($id);
         $slug = Str::slug($request->input("title", ""));
-        if (Recipe::where('slug', $slug)->exists()) {
+        if ($slug != $recipe->slug) if (Recipe::where('slug', $slug)->exists()) {
             $count = 1;
             while (Recipe::where('slug', "$slug-$count")->exists()) {
                 $count += 1;

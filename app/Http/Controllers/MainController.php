@@ -19,7 +19,7 @@ class MainController extends Controller
         $articles = Article::orderByDesc('id')->paginate(6);
         $featured_recipe = Recipe::inRandomOrder()->first();
         //$popular_recipes = Recipe::inRandomOrder()->take(10)->get(['title', 'image_url', 'slug']);
-        $popular_recipes = DB::table("recipes")->leftJoinSub(DB::table("views")->where("views.viewable_table", "=", "recipes"), "views", function (JoinClause $join) {
+        $popular_recipes = DB::table("recipes")->where("deleted_at", null)->leftJoinSub(DB::table("views")->where("views.viewable_table", "=", "recipes"), "views", function (JoinClause $join) {
             $join->on('views.viewable_id', '=', 'recipes.id');
         })->orderByDesc("views.views_count")->orderByDesc("recipes.id")->take(10)->get(['title', 'image_url', 'slug']);
         return view('index', compact("categories", "recipes", "articles", "featured_recipe", "popular_recipes"));
