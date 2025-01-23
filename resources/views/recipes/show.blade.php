@@ -134,7 +134,7 @@
 <body>
 	@include("inc.header")
 	<div class="mx-auto mt-10 flex max-w-6xl flex-wrap">
-		<div class="w-2/3 pr-5">
+		<div class="w-full md:w-2/3 md:pr-5">
 			<main class="bg-white pb-10">
 				<div class="text-center">
 					<span>
@@ -298,7 +298,7 @@
 				</section>
 			</main>
 		</div>
-		<div class="w-1/3 pl-5">
+		<div class="w-full md:w-1/3 md:pl-5">
 			@include("inc.aside")
 		</div>
 	</div>

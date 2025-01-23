@@ -126,7 +126,7 @@
 		</div>
 	</section>
 	<div class="mx-auto grid max-w-6xl gap-5 py-10 md:grid-cols-3">
-		<main class="col-span-2 pl-1">
+		<main class="col-span-2 md:pl-1">
 			<div class="relative mb-3 flex items-baseline after:block after:h-1 after:flex-1 after:bg-neutral-800 after:content-['']">
 				<span class="mr-3 block text-lg font-semibold">Recent Recipes</span>
 			</div>

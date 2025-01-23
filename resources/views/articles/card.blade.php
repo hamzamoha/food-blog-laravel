@@ -1,7 +1,6 @@
 <article>
 	<div class="flex items-start pb-8 pt-4">
-		<img class="w-1/3" src="{{ $article->image_url }}" alt="{{ \Illuminate\Support\Str::title($article->title) }}">
-        <a class="w-1/3" href="{{ route("articles.show", ["slug" => $article->slug], false) }}">
+		<a class="w-1/3" href="{{ route("articles.show", ["slug" => $article->slug], false) }}">
 			<img class="transition-all hover:opacity-80" src="{{ $article->image_url }}" alt="{{ htmlentities(\Illuminate\Support\Str::title($article->title)) }}" title="{{ htmlentities(\Illuminate\Support\Str::title($article->title)) }}">
 		</a>
 		<div class="w-2/3 pl-6 pr-3">
